@@ -18,7 +18,7 @@ public class GameCode extends GameAPI {
 		new MusicPlayer ();
 		//Load the starting room
 		try {
-			getRoom ().loadRMF ("resources/maps/start.rmf");
+			getRoom ().loadRMF ("resources/maps/farm.rmf");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -26,7 +26,7 @@ public class GameCode extends GameAPI {
 		//Declare the player
 		getPlayer ().declare (32, 32);
 		MainLoop.getWindow ().setResolution (480, 480);
-		MainLoop.getWindow ().setSize (480, 480);
+		MainLoop.getWindow ().setSize (960, 960);
 	}
 	
 	public void gameLoop () {

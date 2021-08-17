@@ -812,7 +812,7 @@ public class Room {
 			tileData = new short[numLayers][mapWidth][mapHeight];
 			
 			//Import tile data
-			int numBytes = 1; //TODO
+			int numBytes = (int)(Math.log (tileList.size ()) / Math.log (256)) + 1;
 			for (int i = 0; i < numLayers; i++) {
 				if (backgroundList.get (i) == null) {
 					for (int wy = 0; wy < mapHeight; wy++) {
