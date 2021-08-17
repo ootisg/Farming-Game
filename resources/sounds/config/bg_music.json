@@ -1,0 +1,6 @@
+{
+"example_json": {
+	"path":"resources/sounds/music/music.wav",
+	"delay":500
+}
+}
