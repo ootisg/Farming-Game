@@ -25,3 +25,7 @@ slimered.png
 ui.png
 bubbles.png
 rock.png
+stump.png
+bush.png
+pine_tree.png
+regular_tree.png
