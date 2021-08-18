@@ -32,7 +32,9 @@ public class Outline extends GameObject {
 			
 			//Get the frame to trace and set the redraw parameter appropriately
 			int traceFrame = tracedObj.getAnimationHandler ().getFrame ();
-			BufferedImage toTrace = tracedObj.getSprite ().getImageArray ()[traceFrame];
+			BufferedImage fromTrace = tracedObj.getSprite ().getImageArray ()[traceFrame];
+			BufferedImage toTrace = new BufferedImage (fromTrace.getWidth (), fromTrace.getHeight (), BufferedImage.TYPE_4BYTE_ABGR);
+			toTrace.getGraphics ().drawImage (fromTrace, 0, 0, null);
 			if (tracedImg != toTrace) {
 				redraw = true;
 			}

@@ -3,11 +3,11 @@ package gameObjects;
 import gui.Interactable;
 import main.GameObject;
 
-public class Rock extends SolidStatic implements Interactable {
+public class Bush extends SolidStatic implements Interactable {
 	
-	public Rock () {
+	public Bush () {
 		createHitbox (0, 0, 16, 16);
-		setSprite (getSprites ().rockSprite);
+		setSprite (getSprites ().bushSprite);
 		getAnimationHandler ().setAnimationSpeed (0);
 	}
 	
