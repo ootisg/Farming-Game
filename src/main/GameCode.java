@@ -25,8 +25,8 @@ public class GameCode extends GameAPI {
 		}
 		//Declare the player
 		getPlayer ().declare (32, 32);
-		MainLoop.getWindow ().setResolution (480, 480);
-		MainLoop.getWindow ().setSize (960, 960);
+		MainLoop.getWindow ().setResolution (512, 238);
+		MainLoop.getWindow ().setSize (1024, 576);
 	}
 	
 	public void gameLoop () {

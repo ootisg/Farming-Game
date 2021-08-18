@@ -5,11 +5,13 @@ package resources;
 public class GlobalSprites {
 	//Please alphebitize spritesheets and sprites
 	//Spritesheets
+	public Spritesheet bubbleSheet = new Spritesheet ("resources/sprites/bubbles.png");
 	public Spritesheet playerSheet = new Spritesheet ("resources/sprites/walk_sheet.png");
 	public Spritesheet playerArmSheet = new Spritesheet ("resources/sprites/arms_sheet.png");
 	public Spritesheet swordArmSheet = new Spritesheet ("resources/sprites/swordarmsheet.png");
 	public Spritesheet textSheet = new Spritesheet ("resources/sprites/text.png");
 	//Sprites
+	public Sprite bubbleSprite = new Sprite (bubbleSheet, 16, 16);
 	public Sprite playerIdle = new Sprite (playerSheet, new int[] {0, 0, 0, 0}, new int[] {0, 16, 32, 48}, 16, 16);
 	public Sprite playerArmsIdle = new Sprite (playerArmSheet, new int[] {0, 0, 0, 0}, new int[] {0, 16, 32, 48}, 16, 16);
 	public Sprite[] playerWalkSprites = new Sprite[] {

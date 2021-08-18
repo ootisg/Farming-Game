@@ -8,6 +8,7 @@ import main.MainLoop;
 import projectiles.Projectile;
 import resources.Sprite;
 import util.Vector2D;
+import visualEffects.Bubble;
 
 public class Player extends GameObject implements Damageable {
 	
@@ -47,6 +48,12 @@ public class Player extends GameObject implements Damageable {
 	}
 	@Override
 	public void frameEvent () {
+		if (this.mouseClicked ()) {
+			int tileX = (int)((getMouseX () + getRoom ().getViewX ()) / 16);
+			int tileY = (int)((getMouseY () + getRoom ().getViewY ()) / 16);
+			System.out.println (getRoom ().getTileId (tileX, tileY, 0));
+		}
+		doGraphicsTick ();
 		bubble.setCenter (getCenterX (), getCenterY ());
 		if (invulTime != 0) {
 			invulTime --;
@@ -215,6 +222,28 @@ public class Player extends GameObject implements Damageable {
 	
 	public int getDirection () {
 		return direction;
+	}
+	
+	public void doGraphicsTick () {
+		
+		//Generate the coords for the tick
+		int startX = getRoom ().getViewX () / 16;
+		int startY = getRoom ().getViewY () / 16;
+		int width = MainLoop.getWindow ().getResolution () [0] / 16 + 1;
+		int height = MainLoop.getWindow ().getResolution () [1] / 16 + 1;
+		int randOffsX = (int)(Math.random () * width);
+		int randOffsY = (int)(Math.random () * height);
+		int finalX = startX + randOffsX;
+		int finalY = startY + randOffsY;
+		
+		//Do the tick
+		short tileId = getRoom ().getTileId (finalX, finalY, 0);
+		if (tileId == 247) {
+			if (Math.random () < .2) {
+				new Bubble ().declare (finalX * 16, finalY * 16);
+			}
+		}
+		
 	}
 	
 	public Vector2D getFacingDirection () {

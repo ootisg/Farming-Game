@@ -23,3 +23,4 @@ slimegreen.png
 slimepurple.png
 slimered.png
 ui.png
+bubbles.png
