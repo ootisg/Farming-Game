@@ -24,3 +24,4 @@ slimepurple.png
 slimered.png
 ui.png
 bubbles.png
+rock.png

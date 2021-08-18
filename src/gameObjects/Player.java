@@ -163,7 +163,13 @@ public class Player extends GameObject implements Damageable {
 				}
 			}
 		}
-		return false;
+		ArrayList<GameObject> solids = MainLoop.getObjectMatrix ().getAll (SolidStatic.class);
+		for (int i = 0; i < solids.size (); i++) {
+			if (isColliding (solids.get (i))) {
+				return true;
+			}
+		}
+		return false; 
 	}
 	public void focusView () {
 		int windowWidth = MainLoop.getWindow ().getResolution () [0];
