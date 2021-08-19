@@ -15,9 +15,11 @@ public class GlobalSprites {
 	public Spritesheet swordArmSheet = new Spritesheet ("resources/sprites/swordarmsheet.png");
 	public Spritesheet textSheet = new Spritesheet ("resources/sprites/text.png");
 	public Spritesheet treeSheet = new Spritesheet ("resources/sprites/regular_tree.png");
+	public Spritesheet uiSheet = new Spritesheet ("resources/sprites/ui.png");
 	//Sprites
 	public Sprite bubbleSprite = new Sprite (bubbleSheet, 16, 16);
 	public Sprite bushSprite = new Sprite (bushSheet, 16, 16);
+	public Sprite inventory = new Sprite (uiSheet, 0, 192, 293, 118);
 	public Sprite pineTreeSprite = new Sprite (pineTreeSheet, 32, 48);
 	public Sprite playerIdle = new Sprite (playerSheet, new int[] {0, 0, 0, 0}, new int[] {0, 16, 32, 48}, 16, 16);
 	public Sprite playerArmsIdle = new Sprite (playerArmSheet, new int[] {0, 0, 0, 0}, new int[] {0, 16, 32, 48}, 16, 16);
