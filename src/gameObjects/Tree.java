@@ -1,6 +1,8 @@
 package gameObjects;
 
 import gui.Interactable;
+import items.Stone;
+import items.Wood;
 import main.GameObject;
 
 public class Tree extends SolidStatic implements Interactable {
@@ -48,6 +50,11 @@ public class Tree extends SolidStatic implements Interactable {
 
 	@Override
 	public void click() {
+		getGui ().getInventory ().addItem (new Wood ());
+		getGui ().getInventory ().addItem (new Wood ());
+		getGui ().getInventory ().addItem (new Wood ());
+		getGui ().getInventory ().addItem (new Wood ());
+		getGui ().getInventory ().addItem (new Wood ());
 		forget ();
 	}
 

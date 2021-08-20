@@ -59,6 +59,6 @@ public class Gui extends GameObject {
 		return guiOpen;
 	}
 	public ItemContainer getInventory () {
-		return null; //TODO
+		return inventory;
 	}
 }

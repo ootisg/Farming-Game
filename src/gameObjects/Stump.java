@@ -1,6 +1,7 @@
 package gameObjects;
 
 import gui.Interactable;
+import items.Wood;
 import main.GameObject;
 
 public class Stump extends SolidStatic implements Interactable {
@@ -34,6 +35,7 @@ public class Stump extends SolidStatic implements Interactable {
 
 	@Override
 	public void click() {
+		getGui ().getInventory ().addItem (new Wood ());
 		forget ();
 	}
 

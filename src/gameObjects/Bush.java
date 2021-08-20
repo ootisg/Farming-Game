@@ -1,6 +1,7 @@
 package gameObjects;
 
 import gui.Interactable;
+import items.Hay;
 import main.GameObject;
 
 public class Bush extends SolidStatic implements Interactable {
@@ -34,6 +35,7 @@ public class Bush extends SolidStatic implements Interactable {
 
 	@Override
 	public void click() {
+		getGui ().getInventory ().addItem (new Hay ());
 		forget ();
 	}
 

@@ -2,7 +2,11 @@ package gui;
 
 import java.util.ArrayList;
 
+import items.Avocado;
 import items.GameItem;
+import items.Peach;
+import items.PotatoSeeds;
+import items.Strawberry;
 import json.JSONException;
 import json.JSONUtil;
 
@@ -11,11 +15,13 @@ public class Inventory extends GuiComponent implements ItemContainer {
 	private ArrayList<GameItem> items;
 	private Layout invLayout;
 	
+	private GameItem heldItem;
+	
 	public Inventory () {
 		
-		//Yeet
+		//Initialize the items list
 		items = new ArrayList<GameItem> ();
-		for (int i = 0; i < 27; i++) {
+		for (int i = 0; i < 33; i++) {
 			items.add (null);
 		}
 		
@@ -27,80 +33,170 @@ public class Inventory extends GuiComponent implements ItemContainer {
 			e.printStackTrace();
 		}
 		
+		addItem (new Avocado ());
+		Avocado av = new Avocado ();
+		av.setCount (2);
+		addItem (av);
+		Peach pch = new Peach ();
+		pch.setCount (24);
+		addItem (pch);
+		addItem (new Strawberry ());
+		addItem (new PotatoSeeds ());
+		addItem (new PotatoSeeds ());
+		
+	}
+	
+	@Override
+	public void onDeclare () {
+
 	}
 	
 	@Override
 	public void frameEvent () {
 		if (mouseClicked ()) {
 			int cell = invLayout.getCellContainingPoint (getMouseX (), getMouseY ());
+			if (cell != -1) {
+				//TODO improve inventory UI functionality, it is very primitive
+				if (heldItem == null) {
+					if (getItem (cell) != null) {
+						heldItem = getItem (cell);
+						setItem (cell, null);
+					}
+				} else {
+					if (getItem (cell) == null) {
+						setItem (cell, heldItem);
+						heldItem = null;
+					} else {
+						GameItem temp = heldItem;
+						heldItem = getItem (cell);
+						setItem (cell, temp);
+					}
+				}
+			}
 			System.out.println (cell);
 		}
 	}
 	
 	@Override
 	public boolean hasItem(GameItem item) {
-		// TODO Auto-generated method stub
+		for (int i = 0; i < 27; i++) {
+			if (items.get (i) == item) {
+				return true;
+			}
+		}
 		return false;
 	}
 
 	@Override
 	public boolean hasSimilar(GameItem item) {
-		// TODO Auto-generated method stub
+		for (int i = 0; i < 27; i++) {
+			if (items.get (i) != null && items.get (i).getClass ().equals (item.getClass ())) {
+				return true;
+			}
+		}
 		return false;
 	}
 
 	@Override
 	public int numItems(GameItem item) {
-		// TODO Auto-generated method stub
-		return 0;
+		int count = 0;
+		for (int i = 0; i < 27; i++) {
+			if (items.get (i) == item) {
+				count += items.get (i).getCount ();
+			}
+		}
+		return count;
 	}
 
 	@Override
 	public int numSimilar(GameItem item) {
-		// TODO Auto-generated method stub
-		return 0;
+		int count = 0;
+		for (int i = 0; i < 27; i++) {
+			if (items.get (i) != null && items.get (i).getClass ().equals (item.getClass ())) {
+				count += items.get (i).getCount ();
+			}
+		}
+		return count;
 	}
 
 	@Override
 	public boolean addItem(GameItem item) {
-		// TODO Auto-generated method stub
-		return false;
+		for (int i = 0; i < 27; i++) {
+			if (items.get (i) != null && items.get (i).getClass ().equals (item.getClass ())) {
+				while (item.getCount () != 0) {
+					if (!items.get (i).addOne ()) {
+						break;
+					}
+					item.removeOne ();
+				}
+			}
+		}
+		if (item.getCount () == 0) {
+			return true;
+		}
+		for (int i = 0; i < 27; i++) {
+			if (items.get (i) == null) {
+				items.set (i, item);
+				return true;
+			}
+		}
+		return item.getCount () == 0;
 	}
 
 	@Override
 	public boolean removeItem(GameItem item) {
-		// TODO Auto-generated method stub
+		for (int i = 0; i < 27; i++) {
+			if (items.get (i) == item) {
+				items.set (i, null);
+				return true;
+			}
+		}
 		return false;
 	}
 
 	@Override
 	public boolean removeSimilar(GameItem item) {
-		// TODO Auto-generated method stub
-		return false;
+		for (int i = 0; i < 27; i++) {
+			if (items.get (i) != null && items.get (i).getClass ().equals (item.getClass ())) {
+				while (item.getCount () != 0) {
+					if (!items.get (i).removeOne ()) {
+						break;
+					}
+				}
+			}
+		}
+		return item.getCount () == 0;
 	}
 
 	@Override
 	public boolean replace(GameItem oldItem, GameItem newItem) {
-		// TODO Auto-generated method stub
+		for (int i = 0; i < 27; i++) {
+			if (items.get (i) == oldItem) {
+				items.set (i, newItem);
+				return true;
+			}
+		}
 		return false;
 	}
 
 	@Override
 	public void setItem(int index, GameItem item) {
-		// TODO Auto-generated method stub
-		
+		items.set (index, item);
 	}
 
 	@Override
 	public GameItem getSimilar(GameItem item) {
-		// TODO Auto-generated method stub
+		for (int i = 0; i < 27; i++) {
+			if (items.get (i) != null && items.get (i).getClass ().equals (item.getClass ())) {
+				return items.get (i);
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public GameItem getItem(int index) {
-		// TODO Auto-generated method stub
-		return null;
+		return items.get (index);
 	}
 	
 	@Override
@@ -110,13 +206,17 @@ public class Inventory extends GuiComponent implements ItemContainer {
 		getSprites ().inventory.draw ((int)getX (), (int)getY ());
 		
 		//Draw the inventory items
-		for (int i = 0; i < 27; i++) {
+		for (int i = 0; i < 33; i++) {
 			GameItem item = items.get (i);
 			if (item != null) {
 				int cellX = (int)(getX () + invLayout.getCells().get (i).getX ());
 				int cellY = (int)(getY () + invLayout.getCells().get (i).getY ());
-				item.getIcon ().draw (cellX, cellY);
+				item.draw (cellX, cellY);
 			}
+		}
+		
+		if (heldItem != null) {
+			heldItem.draw (getMouseX(), getMouseY());
 		}
 		
 	}

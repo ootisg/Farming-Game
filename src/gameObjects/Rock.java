@@ -1,6 +1,7 @@
 package gameObjects;
 
 import gui.Interactable;
+import items.Stone;
 import main.GameObject;
 
 public class Rock extends SolidStatic implements Interactable {
@@ -34,6 +35,7 @@ public class Rock extends SolidStatic implements Interactable {
 
 	@Override
 	public void click() {
+		getGui ().getInventory ().addItem (new Stone ());
 		forget ();
 	}
 

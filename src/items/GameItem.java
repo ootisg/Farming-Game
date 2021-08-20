@@ -1,16 +1,22 @@
 package items;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.util.HashMap;
+
 import gameObjects.DamageSource;
 import gameObjects.Damageable;
 import main.GameAPI;
+import main.MainLoop;
 import resources.AnimationHandler;
 import resources.Sprite;
 import resources.Spritesheet;
 
 public abstract class GameItem implements Damageable {
 	private String name;
-	private String properties;
 	private Sprite icon;
+	private HashMap<String, String> properties;
 	protected AnimationHandler animationHandler;
 	private ItemType type;
 	private static boolean usePerciseCompare = false;
@@ -26,21 +32,21 @@ public abstract class GameItem implements Damageable {
 		this.name = this.getClass ().getSimpleName ();
 		setIcon (new Sprite ("resources/sprites/items/" + this.name + ".png"));
 		this.type = type;
-		this.properties = "";
+		this.properties = new HashMap<String, String> ();
 	}
 	protected GameItem (Sprite icon, ItemType type) {
 		this ();
 		this.name = this.getClass ().getSimpleName ();
 		setIcon (icon);
 		this.type = type;
-		this.properties = "";
+		this.properties = new HashMap<String, String> ();
 	}
 	protected GameItem (String name, Sprite icon, ItemType type) {
 		this ();
 		this.name = name;
 		setIcon (icon);
 		this.type = type;
-		this.properties = "";
+		this.properties = new HashMap<String, String> ();
 	}
 	protected GameItem (GameItem item) {
 		this ();
@@ -50,38 +56,10 @@ public abstract class GameItem implements Damageable {
 		this.properties = item.properties;
 	}
 	public String getProperty (String propertyName) {
-		int index = getPropertyIndex (propertyName);
-		if (index != -1) {
-			return getProperties ().split (",")[index].split (":")[1];
-		}
-		return "";
+		return properties.get (propertyName);
 	}
 	public void setProperty (String propertyName, String value) {
-		if (!propertyName.contains (":") && !propertyName.contains (",") && !value.contains (":") && !value.contains (",") && !propertyName.equals ("") && !propertyName.equals ("")) {
-			int index = getPropertyIndex (propertyName);
-			if (index != -1) {
-				String[] propertyArray = getProperties ().split (",");
-				String[] workingProperty = propertyArray [index].split (":");
-				workingProperty [1] = value;
-				propertyArray [index] = String.join (":", workingProperty);
-				setProperties (String.join (",", propertyArray));
-			} else if (!getProperties ().equals ("")) {
-				setProperties (getProperties () + "," + propertyName + ":" + value);
-			} else {
-				setProperties (propertyName + ":" + value);
-			}
-		}
-	}
-	private int getPropertyIndex (String propertyName) {
-		if (getProperties () != null) {
-			String[] propertyArray = getProperties ().split (",");
-			for (int i = 0; i < propertyArray.length; i ++) {
-				if (propertyArray [i].split (":")[0].equals (propertyName)) {
-					return i;
-				}
-			}
-		}
-		return -1;
+		properties.put (propertyName, value);
 	}
 	public String getName () {
 		return name;
@@ -89,13 +67,13 @@ public abstract class GameItem implements Damageable {
 	public Sprite getIcon () {
 		return icon;
 	}
-	public String getProperties () {
+	public HashMap<String, String> getProperties () {
 		return properties;
 	}
 	public ItemType getType () {
 		return type;
 	}
-	public void setProperties (String properties) {
+	public void setProperties (HashMap<String, String> properties) {
 		this.properties = properties;
 	}
 	public static int getValue (ItemType type) {
@@ -140,9 +118,6 @@ public abstract class GameItem implements Damageable {
 	public boolean use () {
 		return false;
 	}
-	public void draw (int x, int y) {
-		animationHandler.animate (x, y, false, false);
-	}
 	@Override
 	public boolean equals (Object o) {
 		if (o.getClass ().getName ().equals (this.getClass ().getName ())) {
@@ -168,6 +143,45 @@ public abstract class GameItem implements Damageable {
 		if (getHealth () <= 0) {
 			GameAPI.getGui ().getInventory ().removeItem (this);
 		}
+	}
+	
+	public int getIntProperty (String name) {
+		String property = getProperty (name);
+		return property == null ? 1 : Integer.parseInt (property);
+	}
+	
+	public int getMaxStack () {
+		return getIntProperty ("maxStack");
+	}
+	
+	public int getCount () {
+		return getIntProperty ("count");
+	}
+	
+	public void setMaxStack (int amt) {
+		properties.put ("maxStack", "" + amt);
+	}
+	
+	public void setCount (int amt) {
+		properties.put ("count", "" + amt);
+	}
+	
+	public boolean removeOne () {
+		int newAmt = getCount () - 1;
+		if (newAmt < 0) {
+			return false;
+		}
+		setCount (newAmt);
+		return true;
+	}
+	
+	public boolean addOne () {
+		int newAmt = getCount () + 1;
+		if (newAmt > getMaxStack ()) {
+			return false;
+		}
+		setCount (newAmt);
+		return true;
 	}
 	
 	@Override
@@ -206,4 +220,16 @@ public abstract class GameItem implements Damageable {
 	public void setMaxHealth (double maxHealth) {
 		setProperty ("maxHealth", String.valueOf (maxHealth));
 	}
+	
+	public void draw (int x, int y) {
+		getIcon ().draw (x, y);
+		if (getCount () > 1) {
+			Graphics g = MainLoop.getWindow ().getBufferGraphics ();
+			Font f = new Font ("Arial", 10, 8);
+			g.setFont (f);
+			g.setColor (Color.WHITE);
+			g.drawString (getProperty ("count"), x + 10, y + 15);
+		}
+	}
+	
 }
