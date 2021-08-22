@@ -2,6 +2,7 @@ package gameObjects;
 
 import java.util.ArrayList;
 
+import crops.GrowingPotato;
 import gui.InteractBubble;
 import main.GameObject;
 import main.MainLoop;
@@ -52,6 +53,7 @@ public class Player extends GameObject implements Damageable {
 			int tileX = (int)((getMouseX () + getRoom ().getViewX ()) / 16);
 			int tileY = (int)((getMouseY () + getRoom ().getViewY ()) / 16);
 			System.out.println (getRoom ().getTileId (tileX, tileY, 0));
+			new GrowingPotato ().declare (tileX * 16, tileY * 16);
 		}
 		doGraphicsTick ();
 		bubble.setCenter (getCenterX (), getCenterY ());

@@ -25,7 +25,7 @@ public class GrowingCrop extends GameObject {
 	}
 	
 	public boolean isFullyGrown () {
-		return getSprite ().getFrameCount () == growthStage - 1;
+		return getSprite ().getFrameCount () - 1 == growthStage;
 	}
 	
 	public void grow () {
@@ -49,6 +49,11 @@ public class GrowingCrop extends GameObject {
 	
 	public void harvest () {
 		forget ();
+	}
+	
+	@Override
+	public void frameEvent () {
+		grow ();
 	}
 	
 	@Override
