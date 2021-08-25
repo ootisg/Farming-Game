@@ -50,23 +50,6 @@ public class Player extends GameObject implements Damageable {
 	}
 	@Override
 	public void frameEvent () {
-		if (this.mouseClicked ()) {
-			//Check the top 3 layers for stuff
-			boolean farmable = false;
-			int tileX = (int)((getMouseX () + getRoom ().getViewX ()) / 16);
-			int tileY = (int)((getMouseY () + getRoom ().getViewY ()) / 16);
-			for (int i = 0; i < 3; i++) {
-				String tileId = getRoom ().getTileIdString (tileX, tileY, i);
-				//System.out.println (tileId + " " + getRoom ().getTileAttributesList ().getTile (tileId).getProperties ());
-				JSONObject tileProperties = getRoom ().getTileAttributesList ().getTile (tileId).getProperties ();
-				if (tileProperties.get ("farmable") != null) {
-					farmable = true;
-				}
-			}
-			if (farmable) {
-				new GrowingPotato ().declare (tileX * 16, tileY * 16);
-			}
-		}
 		doGraphicsTick ();
 		bubble.setCenter (getCenterX (), getCenterY ());
 		if (invulTime != 0) {

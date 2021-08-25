@@ -10,5 +10,21 @@
 		"71": {
 			"solid":false
 		}
+		"84": {
+			"solid":false,
+			"farmable":true
+		},
+		"140": {
+			"solid":false,
+			"farmable":true
+		},
+		"141": {
+			"solid":false,
+			"farmable":true
+		},
+		"142": {
+			"solid":false,
+			"farmable":true
+		}
 	}
 }

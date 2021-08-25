@@ -15,9 +15,14 @@ public class Inventory extends GuiComponent implements ItemContainer {
 	private ArrayList<GameItem> items;
 	private Layout invLayout;
 	
+	private boolean clicked;
+	
 	private GameItem heldItem;
 	
 	public Inventory () {
+		
+		//Set the bg sprite
+		setSprite (getSprites ().inventory);
 		
 		//Initialize the items list
 		items = new ArrayList<GameItem> ();
@@ -46,6 +51,10 @@ public class Inventory extends GuiComponent implements ItemContainer {
 		
 	}
 	
+	public boolean wasClicked () {
+		return clicked;
+	}
+	
 	@Override
 	public void onDeclare () {
 
@@ -53,8 +62,12 @@ public class Inventory extends GuiComponent implements ItemContainer {
 	
 	@Override
 	public void frameEvent () {
+		clicked = false;
 		if (mouseClicked ()) {
-			int cell = invLayout.getCellContainingPoint (getMouseX (), getMouseY ());
+			if (getBounds ().contains (getMouseX (), getMouseY ())) {
+				clicked = true;
+			}
+			int cell = invLayout.getCellContainingPoint (getMouseX () - (int)getX (), getMouseY () - (int)getY ());
 			if (cell != -1) {
 				//TODO improve inventory UI functionality, it is very primitive
 				if (heldItem == null) {

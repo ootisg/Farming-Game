@@ -35,6 +35,8 @@ public class GlobalSprites {
 	public Sprite cropSpritePotato = new Sprite (cropSheetPotato, 16, 16);
 	public Sprite cropSpriteWatermelon = new Sprite (cropSheetWatermelon, 16, 16);
 	public Sprite cropSpriteBeet = new Sprite (cropSheetBeet, 16, 16);
+	public Sprite hotbarHighlight = new Sprite ("resources/sprites/hotbar_highlight.png");
+	public Sprite hotbarSprite = new Sprite ("resources/sprites/hotbar.png");
 	public Sprite inventory = new Sprite (uiSheet, 0, 192, 293, 118);
 	public Sprite pineTreeSprite = new Sprite (pineTreeSheet, 32, 48);
 	public Sprite playerIdle = new Sprite (playerSheet, new int[] {0, 0, 0, 0}, new int[] {0, 16, 32, 48}, 16, 16);

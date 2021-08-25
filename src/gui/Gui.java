@@ -4,7 +4,11 @@ import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
+import crops.GrowingPotato;
 import gameObjects.GlobalSave;
+import items.GameItem;
+import json.JSONObject;
+import main.GameAPI;
 import main.GameObject;
 import main.GameWindow;
 import main.MainLoop;
@@ -16,10 +20,12 @@ public class Gui extends GameObject {
 	public TextInterface textInterface;
 	private boolean guiOpen;
 	private Inventory inventory;
+	private Hotbar hotbar;
 	public Gui () {
 		this.declare (0, 0);
 		this.setPersistent (true);
 		inventory = new Inventory ();
+		hotbar = new Hotbar ();
 	}
 	@Override
 	public void frameEvent () {
@@ -27,6 +33,17 @@ public class Gui extends GameObject {
 			guiOpen = true;
 			MainLoop.pause ();
 		}
+		if (!guiOpen) {
+			hotbar.frameEvent ();
+		}
+		
+		if (GameAPI.mouseClicked () && !GameAPI.getGui ().getHotbar ().wasClicked ()) {
+			GameItem it = hotbar.getSelectedItem ();
+			if (it != null) {
+				it.use ();
+			}
+		}
+		
 	}
 	@Override
 	public void pauseEvent () {
@@ -42,6 +59,8 @@ public class Gui extends GameObject {
 	public void draw () {
 		if (guiOpen) {
 			inventory.draw ();
+		} else {
+			hotbar.draw ();
 		}
 	}
 	public void drawText (String text, int x, int y) {
@@ -60,5 +79,8 @@ public class Gui extends GameObject {
 	}
 	public ItemContainer getInventory () {
 		return inventory;
+	}
+	public Hotbar getHotbar () {
+		return hotbar;
 	}
 }

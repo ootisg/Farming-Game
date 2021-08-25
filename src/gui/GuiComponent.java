@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import main.GameObject;
@@ -46,6 +47,9 @@ public abstract class GuiComponent extends GameObject {
 	}
 	public boolean hasFocus () {
 		return focus;
+	}
+	public Rectangle getBounds () {
+		return new Rectangle ((int)getX (), (int)getY (), getSprite ().getWidth (), getSprite ().getHeight ());
 	}
 	@Override
 	public void pauseEvent () {

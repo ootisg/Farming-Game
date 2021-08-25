@@ -116,7 +116,12 @@ public abstract class GameItem implements Damageable {
 		animationHandler.setAnimationSpeed (speed);
 	}
 	public boolean use () {
-		return false;
+		if (getCount () == 1) {
+			GameAPI.getGui ().getInventory ().removeItem (this);
+		} else {
+			this.removeOne ();
+		}
+		return true;
 	}
 	@Override
 	public boolean equals (Object o) {
