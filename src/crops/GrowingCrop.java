@@ -1,8 +1,9 @@
 package crops;
 
+import gui.Interactable;
 import main.GameObject;
 
-public class GrowingCrop extends GameObject {
+public class GrowingCrop extends GameObject implements Interactable {
 
 	private int growthStage;
 	private int subGrowth;
@@ -13,6 +14,7 @@ public class GrowingCrop extends GameObject {
 		growthStage = 0;
 		subGrowth = 0;
 		growthTime = 0;
+		createHitbox (0, 0, 16, 16);
 		getAnimationHandler ().setAnimationSpeed (0);
 	}
 	
@@ -47,6 +49,10 @@ public class GrowingCrop extends GameObject {
 		}
 	}
 	
+	public void setGrowthStage (int stage) {
+		growthStage = stage;
+	}
+	
 	public void harvest () {
 		forget ();
 	}
@@ -60,6 +66,28 @@ public class GrowingCrop extends GameObject {
 	public void draw () {
 		getAnimationHandler ().setFrame (growthStage);
 		super.draw ();
+	}
+
+	@Override
+	public void hover () {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unhover () {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void click () {
+		harvest ();
+	}
+
+	@Override
+	public boolean useDefaultHover () {
+		return isFullyGrown ();
 	}
 	
 }

@@ -46,6 +46,7 @@ public class Player extends GameObject implements Damageable {
 		bubble.declare (0, 0);
 		setMaxHealth (50);
 		setHealth (50);
+		setPriority (-1);
 		setPersistent (true);
 	}
 	@Override

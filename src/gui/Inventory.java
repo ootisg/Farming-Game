@@ -3,6 +3,7 @@ package gui;
 import java.util.ArrayList;
 
 import items.Avocado;
+import items.CornSeeds;
 import items.GameItem;
 import items.Peach;
 import items.PotatoSeeds;
@@ -48,6 +49,7 @@ public class Inventory extends GuiComponent implements ItemContainer {
 		addItem (new Strawberry ());
 		addItem (new PotatoSeeds ());
 		addItem (new PotatoSeeds ());
+		addItem (new CornSeeds ());
 		
 	}
 	
