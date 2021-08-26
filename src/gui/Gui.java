@@ -24,6 +24,7 @@ public class Gui extends GameObject {
 	public Gui () {
 		this.declare (0, 0);
 		this.setPersistent (true);
+		this.setPriority (-420);
 		inventory = new Inventory ();
 		hotbar = new Hotbar ();
 	}

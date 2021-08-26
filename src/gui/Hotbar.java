@@ -61,7 +61,7 @@ public class Hotbar extends GuiComponent {
 		getSprites ().hotbarSprite.draw ((int)getX (), (int)getY ());
 		
 		//Draw the inventory items
-		for (int i = 0; i < 33; i++) {
+		for (int i = 0; i < 9; i++) {
 			GameItem item = getPlayer ().getGui ().getInventory ().getItem (i);
 			if (item != null) {
 				int cellX = (int)(getX () + barLayout.getCells().get (i).getX ());
