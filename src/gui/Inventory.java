@@ -3,11 +3,17 @@ package gui;
 import java.util.ArrayList;
 
 import items.Avocado;
+import items.BeetSeeds;
+import items.CarrotSeeds;
 import items.CornSeeds;
 import items.GameItem;
 import items.Peach;
 import items.PotatoSeeds;
+import items.PumpkinSeeds;
 import items.Strawberry;
+import items.StrawberrySeeds;
+import items.TomatoSeeds;
+import items.WatermelonSeeds;
 import json.JSONException;
 import json.JSONUtil;
 
@@ -39,17 +45,14 @@ public class Inventory extends GuiComponent implements ItemContainer {
 			e.printStackTrace();
 		}
 		
-		addItem (new Avocado ());
-		Avocado av = new Avocado ();
-		av.setCount (2);
-		addItem (av);
-		Peach pch = new Peach ();
-		pch.setCount (24);
-		addItem (pch);
-		addItem (new Strawberry ());
-		addItem (new PotatoSeeds ());
-		addItem (new PotatoSeeds ());
+		addItem (new CarrotSeeds ());
+		addItem (new TomatoSeeds ());
+		addItem (new StrawberrySeeds ());
+		addItem (new PumpkinSeeds ());
 		addItem (new CornSeeds ());
+		addItem (new PotatoSeeds ());
+		addItem (new WatermelonSeeds ());
+		addItem (new BeetSeeds ());
 		
 	}
 	
