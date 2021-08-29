@@ -53,6 +53,16 @@ public class Hotbar extends GuiComponent {
 			}
 			System.out.println (cell);
 		}
+		//Keyboard hotbar switching
+		if (keyPressed ('1')) {selection = 0;}
+		if (keyPressed ('2')) {selection = 1;}
+		if (keyPressed ('3')) {selection = 2;}
+		if (keyPressed ('4')) {selection = 3;}
+		if (keyPressed ('5')) {selection = 4;}
+		if (keyPressed ('6')) {selection = 5;}
+		if (keyPressed ('7')) {selection = 6;}
+		if (keyPressed ('8')) {selection = 7;}
+		if (keyPressed ('9')) {selection = 8;}
 	}
 	
 	public void draw () {
