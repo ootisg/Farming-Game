@@ -30,6 +30,7 @@ public class Inventory extends GuiComponent implements ItemContainer {
 		
 		//Set the bg sprite
 		setSprite (getSprites ().inventory);
+		setY (9);
 		
 		//Initialize the items list
 		items = new ArrayList<GameItem> ();

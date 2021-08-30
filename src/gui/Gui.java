@@ -21,12 +21,17 @@ public class Gui extends GameObject {
 	private boolean guiOpen;
 	private Inventory inventory;
 	private Hotbar hotbar;
+	private TimeOverlay timeOverlay;
+	private Environment environment;
 	public Gui () {
 		this.declare (0, 0);
 		this.setPersistent (true);
 		this.setPriority (-420);
 		inventory = new Inventory ();
 		hotbar = new Hotbar ();
+		timeOverlay = new TimeOverlay ();
+		environment = new Environment ();
+		environment.setTimeDisplay (timeOverlay);
 	}
 	@Override
 	public void frameEvent () {
@@ -35,6 +40,7 @@ public class Gui extends GameObject {
 			MainLoop.pause ();
 		}
 		if (!guiOpen) {
+			environment.frameEvent (); //Environment state only advances when not paused
 			hotbar.frameEvent ();
 		}
 		
@@ -63,6 +69,7 @@ public class Gui extends GameObject {
 		} else {
 			hotbar.draw ();
 		}
+		timeOverlay.draw ();
 	}
 	public void drawText (String text, int x, int y) {
 		for (int i = 0; i < text.length (); i ++) {

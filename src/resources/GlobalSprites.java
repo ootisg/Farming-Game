@@ -23,7 +23,10 @@ public class GlobalSprites {
 	public Spritesheet swordArmSheet = new Spritesheet ("resources/sprites/swordarmsheet.png");
 	public Spritesheet textSheet = new Spritesheet ("resources/sprites/text.png");
 	public Spritesheet treeSheet = new Spritesheet ("resources/sprites/regular_tree.png");
+	public Spritesheet uiNumSheet = new Spritesheet ("resources/sprites/ui_numbers.png");
+	public Spritesheet uiPmAmSheet = new Spritesheet ("resources/sprites/ui_am_pm.png");
 	public Spritesheet uiSheet = new Spritesheet ("resources/sprites/ui.png");
+	public Spritesheet uiWeekSheet = new Spritesheet ("resources/sprites/ui_weekday.png");
 	//Sprites
 	public Sprite bubbleSprite = new Sprite (bubbleSheet, 16, 16);
 	public Sprite bushSprite = new Sprite (bushSheet, 16, 16);
@@ -44,6 +47,10 @@ public class GlobalSprites {
 	public Sprite rockSprite = new Sprite (rockSheet, 16, 16);
 	public Sprite stumpSprite = new Sprite (stumpSheet, 16, 16);
 	public Sprite treeSprite = new Sprite (treeSheet, 32, 48);
+	public Sprite uiNumSprite = new Sprite (uiNumSheet, 6, 7);
+	public Sprite uiPmAmSprite = new Sprite (uiPmAmSheet, 16, 7);
+	public Sprite uiTimeSprite = new Sprite ("resources/sprites/time_display.png");
+	public Sprite uiWeekSprite = new Sprite (uiWeekSheet, 23, 8);
 	public Sprite[] playerWalkSprites = new Sprite[] {
 			new Sprite (playerSheet, new int[] {16, 0, 32, 0}, new int[] {0, 0, 0, 0}, 16, 16),
 			new Sprite (playerSheet, new int[] {16, 0, 32, 0}, new int[] {16, 16, 16, 16}, 16, 16),
