@@ -15,6 +15,7 @@ public class GlobalSprites {
 	public Spritesheet cropSheetPotato = new Spritesheet ("resources/sprites/crops/potato.png");
 	public Spritesheet cropSheetWatermelon = new Spritesheet ("resources/sprites/crops/watermelon.png");
 	public Spritesheet cropSheetBeet = new Spritesheet ("resources/sprites/crops/beet.png");
+	public Spritesheet doorStdSheet = new Spritesheet ("resources/sprites/door_std.png");
 	public Spritesheet pineTreeSheet = new Spritesheet ("resources/sprites/pine_tree.png");
 	public Spritesheet playerSheet = new Spritesheet ("resources/sprites/walk_sheet.png");
 	public Spritesheet playerArmSheet = new Spritesheet ("resources/sprites/arms_sheet.png");
@@ -38,6 +39,7 @@ public class GlobalSprites {
 	public Sprite cropSpritePotato = new Sprite (cropSheetPotato, 16, 16);
 	public Sprite cropSpriteWatermelon = new Sprite (cropSheetWatermelon, 16, 16);
 	public Sprite cropSpriteBeet = new Sprite (cropSheetBeet, 16, 16);
+	public Sprite doorStdSprite = new Sprite (doorStdSheet, 12, 16);
 	public Sprite hotbarHighlight = new Sprite ("resources/sprites/hotbar_highlight.png");
 	public Sprite hotbarSprite = new Sprite ("resources/sprites/hotbar.png");
 	public Sprite inventory = new Sprite (uiSheet, 0, 192, 293, 118);

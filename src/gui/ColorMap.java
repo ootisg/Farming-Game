@@ -43,7 +43,6 @@ public class ColorMap {
 						double lerpPos = (pos - curr.pos) / (next.pos - curr.pos);
 						Vector4D a = new Vector4D (curr.color);
 						Vector4D b = new Vector4D (next.color);
-						System.out.println ((pos - curr.pos) + " / " + (next.pos - curr.pos));
 						a.lerp (b, lerpPos);
 						return fromVec4D (a);
 					} else {

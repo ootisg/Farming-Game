@@ -70,6 +70,9 @@ public class Gui extends GameObject {
 			hotbar.draw ();
 		}
 		timeOverlay.draw ();
+		
+		//Draw the environment overlay effects after everything else
+		environment.draw ();
 	}
 	public void drawText (String text, int x, int y) {
 		for (int i = 0; i < text.length (); i ++) {
@@ -87,6 +90,9 @@ public class Gui extends GameObject {
 	}
 	public ItemContainer getInventory () {
 		return inventory;
+	}
+	public Environment getEnvironment () {
+		return environment;
 	}
 	public Hotbar getHotbar () {
 		return hotbar;
