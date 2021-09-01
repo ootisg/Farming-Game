@@ -6,7 +6,7 @@ public class GrowingPotato extends GrowingCrop {
 
 	public GrowingPotato () {
 		super ();
-		setGrowthTime (30);
+		setGrowthTime (3);
 		setSprite (getSprites ().cropSpritePotato);
 	}
 	

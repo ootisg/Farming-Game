@@ -7,7 +7,7 @@ public class GrowingPumpkin extends GrowingCrop {
 	public GrowingPumpkin () {
 		super ();
 		setSprite (getSprites ().cropSpritePumpkin);
-		setGrowthTime (50);
+		setGrowthTime (5);
 	}
 	
 	@Override

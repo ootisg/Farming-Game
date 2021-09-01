@@ -1,6 +1,7 @@
 package crops;
 
 import gui.Interactable;
+import main.GameCode;
 import main.GameObject;
 
 public class GrowingCrop extends GameObject implements Interactable {
@@ -18,6 +19,11 @@ public class GrowingCrop extends GameObject implements Interactable {
 		getAnimationHandler ().setAnimationSpeed (0);
 	}
 	
+	@Override
+	public void onDeclare () {
+		GameCode.getCropHandler ().addCrop (this);
+	}
+	
 	public int getGrowthStage () {
 		return growthStage;
 	}
@@ -28,6 +34,10 @@ public class GrowingCrop extends GameObject implements Interactable {
 	
 	public boolean isFullyGrown () {
 		return getSprite ().getFrameCount () - 1 == growthStage;
+	}
+	
+	public void attemptGrow () {
+		grow (); //TODO add growth conditions
 	}
 	
 	public void grow () {
@@ -59,7 +69,7 @@ public class GrowingCrop extends GameObject implements Interactable {
 	
 	@Override
 	public void frameEvent () {
-		grow ();
+		
 	}
 	
 	@Override

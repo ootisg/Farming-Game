@@ -11,6 +11,7 @@ public class Environment extends GameObject {
 	private TimeOverlay timeDisplay;
 	private int weekDay;
 	private int monthDay = 1;
+	private int monthCount = 0;
 	
 	private long dayDurationMs;
 	
@@ -43,6 +44,14 @@ public class Environment extends GameObject {
 		return monthDay;
 	}
 	
+	public int getElapsedDays () {
+		return monthCount * 28 + monthDay - 1;
+	}
+	
+	public int getElapsedMonths () {
+		return monthCount;
+	}
+	
 	public void setTimeDisplay (TimeOverlay display) {
 		timeDisplay = display;
 	}
@@ -52,6 +61,7 @@ public class Environment extends GameObject {
 		monthDay++;
 		if (monthDay > 28) {
 			monthDay = 1;
+			monthCount++;
 		}
 	}
 	

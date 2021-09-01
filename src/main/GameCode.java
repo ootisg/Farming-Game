@@ -4,10 +4,13 @@ import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import crops.CropHandler;
 import gameObjects.GlobalSave;
 import music.MusicPlayer;
 
 public class GameCode extends GameAPI {
+	
+	private static CropHandler cropHandler;
 	
 	public void initialize () {
 		//Set the save file path
@@ -27,10 +30,17 @@ public class GameCode extends GameAPI {
 		getPlayer ().declare (32, 32);
 		MainLoop.getWindow ().setResolution (512, 238);
 		MainLoop.getWindow ().setSize (1024, 576);
+		//Make the crop handler
+		cropHandler = new CropHandler ();
+		cropHandler.declare (0, 0);
 	}
 	
 	public void gameLoop () {
 		//Runs once per frame
+	}
+	
+	public static CropHandler getCropHandler () {
+		return cropHandler;
 	}
 	
 }

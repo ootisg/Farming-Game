@@ -7,7 +7,7 @@ public class GrowingBeet extends GrowingCrop {
 	public GrowingBeet () {
 		super ();
 		setSprite (getSprites ().cropSpriteBeet);
-		setGrowthTime (40);
+		setGrowthTime (4);
 	}
 	
 	@Override

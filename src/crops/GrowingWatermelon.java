@@ -7,7 +7,7 @@ public class GrowingWatermelon extends GrowingCrop {
 	public GrowingWatermelon () {
 		super ();
 		setSprite (getSprites ().cropSpriteWatermelon);
-		setGrowthTime (60);
+		setGrowthTime (6);
 	}
 	
 	@Override

@@ -7,7 +7,7 @@ public class GrowingStrawberry extends GrowingCrop {
 	public GrowingStrawberry () {
 		super ();
 		setSprite (getSprites ().cropSpriteStrawberry);
-		setGrowthTime (20);
+		setGrowthTime (2);
 	}
 	
 	@Override

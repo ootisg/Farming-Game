@@ -7,7 +7,7 @@ public class GrowingCarrot extends GrowingCrop {
 	public GrowingCarrot () { 
 		super ();
 		setSprite (getSprites ().cropSpriteCarrot);
-		setGrowthTime (20);
+		setGrowthTime (2);
 	}
 
 	@Override
