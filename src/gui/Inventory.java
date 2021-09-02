@@ -13,6 +13,7 @@ import items.PumpkinSeeds;
 import items.Strawberry;
 import items.StrawberrySeeds;
 import items.TomatoSeeds;
+import items.WateringCan;
 import items.WatermelonSeeds;
 import json.JSONException;
 import json.JSONUtil;
@@ -54,6 +55,7 @@ public class Inventory extends GuiComponent implements ItemContainer {
 		addItem (new PotatoSeeds ());
 		addItem (new WatermelonSeeds ());
 		addItem (new BeetSeeds ());
+		addItem (new WateringCan ());
 		
 	}
 	

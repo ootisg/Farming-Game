@@ -25,7 +25,7 @@ public class Door extends GameObject implements Interactable {
 
 	@Override
 	public void click() {
-		getGui ().getEnvironment ().startDay ();
+		getGui ().getEnvironment ().skipDay ();
 	}
 
 	@Override

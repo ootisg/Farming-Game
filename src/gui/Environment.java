@@ -2,9 +2,13 @@ package gui;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.HashMap;
 
+import main.GameCode;
 import main.GameObject;
 import main.MainLoop;
+import map.TileAttributesMap;
+import map.TileData;
 
 public class Environment extends GameObject {
 	
@@ -16,6 +20,9 @@ public class Environment extends GameObject {
 	private long dayDurationMs;
 	
 	private ColorMap todColor;
+	
+	private static HashMap<String, String> wetTileMap;
+	private static HashMap<String, String> dryTileMap;
 	
 	public Environment () {
 		
@@ -56,12 +63,111 @@ public class Environment extends GameObject {
 		timeDisplay = display;
 	}
 	
+	public void skipDay () {
+		
+		//TODO hacky
+		dayDurationMs = 1440001;
+		
+	}
+	
 	public void startDay () {
-		dayDurationMs = 360000;
-		monthDay++;
-		if (monthDay > 28) {
-			monthDay = 1;
-			monthCount++;
+		
+		//Handle environment-related events
+		dryMap ();
+		
+	}
+	
+	public static String getWetVersion (String tileId) {
+		
+		//Init wet tile map if null
+		if (wetTileMap == null) {
+			wetTileMap = new HashMap<String, String> ();
+		}
+		
+		//Check the map for a cached result
+		if (wetTileMap.containsKey (tileId)) {
+			return wetTileMap.get (tileId);
+		}
+		
+		//Find the proper result if not cached
+		TileAttributesMap attributes = GameCode.getRoom ().getTileAttributesList ();
+		TileData td = attributes.getTile (tileId);
+		Object wateredTile = td.getProperties ().get ("watered");
+		if (wateredTile != null) {
+			String finalTile = "farming_tiles.png:" + wateredTile;
+			wetTileMap.put (tileId, finalTile); //Cache the result
+			return finalTile;
+		}
+		
+		//Return null if the tile has no watered variant
+		return null;
+		
+	}
+	
+	public static String getDryVersion (String tileId) {
+		
+		//Init dry tile map if null
+		if (dryTileMap == null) {
+			dryTileMap = new HashMap<String, String> ();
+		}
+		
+		//Check the map for a cached result
+		if (dryTileMap.containsKey (tileId)) {
+			return dryTileMap.get (tileId);
+		}
+		
+		//Find the proper result if not cached
+		TileAttributesMap attributes = GameCode.getRoom ().getTileAttributesList ();
+		TileData td = attributes.getTile (tileId);
+		Object driedTile = td.getProperties ().get ("dried");
+		if (driedTile != null) {
+			String finalTile = "farming_tiles.png:" + driedTile;
+			dryTileMap.put (tileId, finalTile); //Cache the result
+			return finalTile;
+		}
+		
+		//Return null if the tile has no watered variant
+		return null;
+		
+	}
+	
+	public void dryMap () {
+		int width = getRoom ().getWidth ();
+		int height = getRoom ().getHeight ();
+		for (int wy = 0; wy < height; wy++) {
+			for (int wx = 0; wx < width; wx++) {
+				dryTile (wx, wy);
+			}
+		}
+	}
+	
+	public void wetMap () {
+		int width = getRoom ().getWidth ();
+		int height = getRoom ().getHeight ();
+		for (int wy = 0; wy < height; wy++) {
+			for (int wx = 0; wx < width; wx++) {
+				waterTile (wx, wy);
+			}
+		}
+	}
+	
+	public void waterTile (int tileX, int tileY) {
+		for (int i = 0; i < 3; i++) {
+			String strId = GameCode.getRoom ().getTileIdString (tileX, tileY, i);
+			String wateredTile = Environment.getWetVersion (strId);
+			if (wateredTile != null) {
+				GameCode.getRoom ().setTile (i, tileX, tileY, wateredTile);
+			}
+		}
+	}
+	
+	public void dryTile (int tileX, int tileY) {
+		for (int i = 0; i < 3; i++) {
+			String strId = GameCode.getRoom ().getTileIdString (tileX, tileY, i);
+			String driedTile = Environment.getDryVersion (strId);
+			if (driedTile != null) {
+				GameCode.getRoom ().setTile (i, tileX, tileY, driedTile);
+			}
 		}
 	}
 	
@@ -72,7 +178,16 @@ public class Environment extends GameObject {
 		timeDisplay.setMonthDay (getMonthDay ());
 		dayDurationMs += 33;
 		if (dayDurationMs > 1440000) { //1440000 ms is midnight
+			dayDurationMs = 360000;
+			monthDay++;
+			if (monthDay > 28) {
+				monthDay = 1;
+				monthCount++;
+			}
+			GameCode.getCropHandler ().frameEvent (); //Handle crop growth before drying/wetting soil
 			startDay ();
+		} else {
+			GameCode.getCropHandler ().frameEvent (); //Do crop growth
 		}
 	}
 

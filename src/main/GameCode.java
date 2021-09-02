@@ -32,7 +32,6 @@ public class GameCode extends GameAPI {
 		MainLoop.getWindow ().setSize (1024, 576);
 		//Make the crop handler
 		cropHandler = new CropHandler ();
-		cropHandler.declare (0, 0);
 	}
 	
 	public void gameLoop () {

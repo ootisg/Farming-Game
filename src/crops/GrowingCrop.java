@@ -37,7 +37,9 @@ public class GrowingCrop extends GameObject implements Interactable {
 	}
 	
 	public void attemptGrow () {
-		grow (); //TODO add growth conditions
+		if (isWatered ()) {
+			grow ();
+		}
 	}
 	
 	public void grow () {
@@ -65,6 +67,21 @@ public class GrowingCrop extends GameObject implements Interactable {
 	
 	public void harvest () {
 		forget ();
+	}
+	
+	public boolean isWatered () {
+		int tileX = (int)getX () / 16;
+		int tileY = (int)getY () / 16;
+		for (int i = 0; i < 3; i++) {
+			String tileId = getRoom ().getTileIdString (tileX, tileY, i);
+			Boolean isWet = (Boolean)getRoom ().getTileAttributesList ().getTile (tileId).getProperties ().get ("wet");
+			if (isWet == null) {
+				//Do nothing
+			} else if (isWet) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	@Override

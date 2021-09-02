@@ -12,19 +12,47 @@
 		}
 		"84": {
 			"solid":false,
-			"farmable":true
+			"farmable":true,
+			"watered":165
 		},
 		"140": {
 			"solid":false,
-			"farmable":true
+			"farmable":true,
+			"watered":221
 		},
 		"141": {
 			"solid":false,
-			"farmable":true
+			"farmable":true,
+			"watered":222
 		},
 		"142": {
 			"solid":false,
-			"farmable":true
+			"farmable":true,
+			"watered":223
+		},
+		"165": {
+			"solid":false,
+			"farmable":true,
+			"wet":true,
+			"dried":84
+		},
+		"221": {
+			"solid":false,
+			"farmable":true,
+			"wet":true,
+			"dried":140
+		},
+		"222": {
+			"solid":false,
+			"farmable":true,
+			"wet":true,
+			"dried":141
+		},
+		"223": {
+			"solid":false,
+			"farmable":true,
+			"wet":true,
+			"dried":142
 		}
 	}
 }

@@ -21,7 +21,7 @@ public abstract class GameItem implements Damageable {
 	private ItemType type;
 	private static boolean usePerciseCompare = false;
 	public static enum ItemType {
-		WEAPON, EQUIPMENT, CONSUMABLE, MATERIAL, SPELL, OTHER;
+		WEAPON, EQUIPMENT, CONSUMABLE, MATERIAL, TOOL, OTHER;
 	}
 	private GameItem () {
 		animationHandler = new AnimationHandler (null);
@@ -86,7 +86,7 @@ public abstract class GameItem implements Damageable {
 				return 2;
 			case MATERIAL:
 				return 3;
-			case SPELL:
+			case TOOL:
 				return 4;
 			default:
 				return 0;

@@ -51,6 +51,12 @@ public class Player extends GameObject implements Damageable {
 	}
 	@Override
 	public void frameEvent () {
+		if (mouseClicked ()) {
+			int clickX = (int)(getMouseX () / 16);
+			int clickY = (int)(getMouseY () / 16);
+			short tile = getRoom ().getTileId (clickX, clickY, 0);
+			System.out.println ("TILE ID: " + tile);
+		}
 		doGraphicsTick ();
 		bubble.setCenter (getCenterX (), getCenterY ());
 		if (invulTime != 0) {
