@@ -505,7 +505,7 @@ public abstract class GameObject extends GameAPI implements Comparable<GameObjec
 		return flipVertical;
 	}
 	public double[] getStartPos () {
-		return startPos;
+		return startPos == null ? new double[] {0, 0} : startPos;
 	}
 	public boolean isDeclared () {
 		return isDeclared;

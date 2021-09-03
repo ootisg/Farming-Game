@@ -90,6 +90,9 @@ public class Player extends GameObject implements Damageable {
 				this.backstepX ();
 			}
 		}
+		if (keyPressed (';')) {
+			getSave ().writeToFile ();
+		}
 		if (keyCheck ('W') || keyCheck ('A') || keyCheck ('S') || keyCheck ('D')) {
 			if (this.getSprite () != getSprites ().playerWalkSprites [direction]) {
 				this.setSprite (getSprites ().playerWalkSprites [direction]);

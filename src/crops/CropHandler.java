@@ -6,20 +6,18 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import gameObjects.Saveable;
 import main.GameObject;
 
-public class CropHandler extends GameObject {
+public class CropHandler extends Saveable {
 
 	private HashMap<Point, GrowingCrop> crops;
 	private int globalGrowth;
 	
+	private boolean firstFrame = true;
+	
 	public CropHandler () {
 		globalGrowth = 0;
-	}
-	
-	@Override
-	public void onDeclare () {
-		setPersistent (true);
 	}
 	
 	public void addCrop (GrowingCrop crop) {
@@ -40,6 +38,16 @@ public class CropHandler extends GameObject {
 			Entry<Point, GrowingCrop> currCrop = iter.next ();
 			currCrop.getValue ().attemptGrow ();
 		}
+		iter = cropsSet.iterator ();
+		String crops = "";
+		while (iter.hasNext ()) {
+			GrowingCrop crop = (GrowingCrop)iter.next ().getValue ();
+			crops += crop;
+			if (iter.hasNext ()) {
+				crops += ";";
+			}
+		}
+		save (crops);
 	}
 	
 	public static int getGlobalGrowthStage () {
@@ -53,10 +61,24 @@ public class CropHandler extends GameObject {
 	
 	@Override
 	public void frameEvent () {
+		if (firstFrame) {
+			load ();
+			firstFrame = false;
+		}
 		while (globalGrowth < getGlobalGrowthStage ()) {
 			//Grow crops until growth stage is matched
 			globalGrowth++;
 			growAll ();
+		}
+	}
+
+	@Override
+	public void load() {
+		if (getSaveData () != null) {
+			String[] split = getSaveData ().split (";");
+			for (int i = 0; i < split.length; i++) {
+				GrowingCrop.fromString (split [i]);
+			}
 		}
 	}
 	

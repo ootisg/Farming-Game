@@ -4,13 +4,13 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.HashMap;
 
+import gameObjects.Saveable;
 import main.GameCode;
-import main.GameObject;
 import main.MainLoop;
 import map.TileAttributesMap;
 import map.TileData;
 
-public class Environment extends GameObject {
+public class Environment extends Saveable {
 	
 	private TimeOverlay timeDisplay;
 	private int weekDay;
@@ -23,6 +23,8 @@ public class Environment extends GameObject {
 	
 	private static HashMap<String, String> wetTileMap;
 	private static HashMap<String, String> dryTileMap;
+	
+	private boolean firstFrame = true;
 	
 	public Environment () {
 		
@@ -173,6 +175,14 @@ public class Environment extends GameObject {
 	
 	@Override
 	public void frameEvent () {
+		
+		//Load save data
+		if (firstFrame) {
+			load ();
+			firstFrame = false;
+		}
+		
+		//Other stuffs
 		timeDisplay.setTime (getGameTime ());
 		timeDisplay.setWeekDay (getWeekDay ());
 		timeDisplay.setMonthDay (getMonthDay ());
@@ -189,6 +199,8 @@ public class Environment extends GameObject {
 		} else {
 			GameCode.getCropHandler ().frameEvent (); //Do crop growth
 		}
+		
+		this.save ("" + monthCount + "," + monthDay);
 	}
 
 	@Override
@@ -197,6 +209,15 @@ public class Environment extends GameObject {
 		Graphics g = MainLoop.getWindow ().getBufferGraphics ();
 		g.setColor (c);
 		g.fillRect (0, 0, MainLoop.getWindow ().getResolution () [0], MainLoop.getWindow ().getResolution () [1]);
+	}
+
+	@Override
+	public void load() {
+		if (getSaveData () != null) {
+			String[] parsed = getSaveData ().split (",");
+			monthCount = Integer.parseInt (parsed [0]);
+			monthDay = Integer.parseInt (parsed [1]);
+		}
 	}
 	
 }

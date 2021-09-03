@@ -1,8 +1,12 @@
 package crops;
 
+import java.lang.reflect.InvocationTargetException;
+
 import gui.Interactable;
 import main.GameCode;
 import main.GameObject;
+import main.MainLoop;
+import main.ObjectMatrix;
 
 public class GrowingCrop extends GameObject implements Interactable {
 
@@ -109,12 +113,35 @@ public class GrowingCrop extends GameObject implements Interactable {
 
 	@Override
 	public void click () {
-		harvest ();
+		if (isFullyGrown ()) {
+			harvest ();
+		}
 	}
 
 	@Override
 	public boolean useDefaultHover () {
 		return isFullyGrown ();
+	}
+	
+	@Override
+	public String toString () {
+		return getClass ().getSimpleName () + "," + ((int)getX ()) + "," + ((int)getY ()) + "," + growthStage + "," + subGrowth;
+	}
+	
+	public static GrowingCrop fromString (String str) {
+		String[] parsed = str.split (",");
+		try {
+			GrowingCrop crop = (GrowingCrop)ObjectMatrix.makeInstance (parsed [0]);
+			crop.declare (Integer.parseInt (parsed [1]), Integer.parseInt (parsed [2]));
+			crop.setGrowthStage (Integer.parseInt (parsed [3]));
+			crop.subGrowth = (Integer.parseInt (parsed [4]));
+			return crop;
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 }

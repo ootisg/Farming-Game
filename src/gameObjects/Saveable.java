@@ -1,27 +1,28 @@
 package gameObjects;
 
-import java.util.ArrayList;
-
 import main.GameObject;
 
 public abstract class Saveable extends GameObject {
-	
-	private static ArrayList<String> saveData = new ArrayList<String> ();
 	
 	protected Saveable () {
 		super ();
 	}
 	
+	@Override
+	public void onDeclare () {
+		load ();
+	}
+	
 	public void save (String data, String roomName) {
-		getSave ().save (roomName, getSaveId (), data);
+		getSave ().save (getSaveId (), data);
 	}
 	
 	public void save (String data) {
 		save (data, getRoom ().getRoomName ());
 	}
 	
-	protected String getSaveData (String roomName) {
-		return getSave ().getSaveData (roomName, getSaveId ());
+	protected String getSaveData (String objId) {
+		return getSave ().getSaveData (getSaveId ());
 	}
 	
 	protected String getSaveData () {
@@ -29,7 +30,11 @@ public abstract class Saveable extends GameObject {
 	}
 	
 	public String getSaveId () {
-		return (int)getStartPos ()[0] + "," + (int)getStartPos ()[1];
+		return getSaveRoom () + "," + getClass ().getSimpleName () + "," + (int)getStartPos ()[0] + "," + (int)getStartPos ()[1];
+	}
+	
+	public String getSaveRoom () {
+		return getRoom ().getRoomName ();
 	}
 	
 	public abstract void load ();
