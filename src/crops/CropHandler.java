@@ -73,7 +73,7 @@ public class CropHandler extends Saveable {
 	}
 
 	@Override
-	public void load() {
+	public void load () {
 		if (getSaveData () != null) {
 			String[] split = getSaveData ().split (";");
 			for (int i = 0; i < split.length; i++) {
