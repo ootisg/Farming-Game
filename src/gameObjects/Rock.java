@@ -4,7 +4,7 @@ import gui.Interactable;
 import items.Stone;
 import main.GameObject;
 
-public class Rock extends SolidStatic implements Interactable {
+public class Rock extends Debris implements Interactable {
 	
 	public Rock () {
 		createHitbox (0, 0, 16, 16);
@@ -35,6 +35,7 @@ public class Rock extends SolidStatic implements Interactable {
 
 	@Override
 	public void click() {
+		onHarvest ();
 		getGui ().getInventory ().addItem (new Stone ());
 		forget ();
 	}

@@ -25,6 +25,7 @@ public class Environment extends Saveable {
 	private static HashMap<String, String> dryTileMap;
 	
 	private boolean firstFrame = true;
+	private boolean isLoaded = false;
 	
 	public Environment () {
 		
@@ -180,6 +181,7 @@ public class Environment extends Saveable {
 		if (firstFrame) {
 			load ();
 			firstFrame = false;
+			isLoaded = true;
 		}
 		
 		//Other stuffs
@@ -203,6 +205,10 @@ public class Environment extends Saveable {
 		this.save ("" + monthCount + "," + monthDay);
 	}
 
+	public boolean isLoaded () {
+		return isLoaded;
+	}
+	
 	@Override
 	public void draw () {
 		Color c = todColor.getColor ((double)dayDurationMs / 1440000);

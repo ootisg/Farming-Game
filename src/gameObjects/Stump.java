@@ -4,7 +4,7 @@ import gui.Interactable;
 import items.Wood;
 import main.GameObject;
 
-public class Stump extends SolidStatic implements Interactable {
+public class Stump extends Debris implements Interactable {
 	
 	public Stump () {
 		createHitbox (0, 0, 16, 16);
@@ -35,6 +35,7 @@ public class Stump extends SolidStatic implements Interactable {
 
 	@Override
 	public void click() {
+		onHarvest ();
 		getGui ().getInventory ().addItem (new Wood ());
 		forget ();
 	}

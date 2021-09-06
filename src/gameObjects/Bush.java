@@ -4,7 +4,7 @@ import gui.Interactable;
 import items.Hay;
 import main.GameObject;
 
-public class Bush extends SolidStatic implements Interactable {
+public class Bush extends Debris implements Interactable {
 	
 	public Bush () {
 		createHitbox (0, 0, 16, 16);
@@ -35,6 +35,7 @@ public class Bush extends SolidStatic implements Interactable {
 
 	@Override
 	public void click() {
+		onHarvest ();
 		getGui ().getInventory ().addItem (new Hay ());
 		forget ();
 	}

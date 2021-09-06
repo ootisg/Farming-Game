@@ -6,7 +6,7 @@ import items.Stone;
 import items.Wood;
 import main.GameObject;
 
-public class Tree extends SolidStatic implements Interactable {
+public class Tree extends Debris implements Interactable {
 	
 	public Tree () {
 		createHitbox (0, 11, 32, 32);
@@ -51,6 +51,7 @@ public class Tree extends SolidStatic implements Interactable {
 
 	@Override
 	public void click() {
+		onHarvest ();
 		GameItem wood = new Wood ();
 		wood.setCount (6);
 		getGui ().getInventory ().addItem (wood);
