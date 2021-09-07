@@ -1,6 +1,8 @@
 package gameObjects;
 
-import main.GameObject;
+import java.lang.reflect.InvocationTargetException;
+
+import main.ObjectMatrix;
 
 public class Debris extends Saveable {
 
@@ -19,6 +21,24 @@ public class Debris extends Saveable {
 		if (!isRandomSpawn) {
 			save ("" + getGui ().getEnvironment ().getElapsedMonths ());
 		}
+	}
+	
+	public static Debris fromString (String s) {
+		String[] splitStr = s.split (",");
+		try {
+			Debris d = (Debris)ObjectMatrix.makeInstance (splitStr [0]);
+			d.declare (Integer.parseInt (splitStr [1]), Integer.parseInt (splitStr [2]));
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	@Override
+	public String toString () {
+		return getClass ().getSimpleName () + "," + ((int)getX ()) + "," + ((int)getY ());
 	}
 	
 	@Override

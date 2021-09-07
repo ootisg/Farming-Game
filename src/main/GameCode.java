@@ -5,12 +5,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import crops.CropHandler;
+import gameObjects.DebrisHandler;
 import gameObjects.GlobalSave;
 import music.MusicPlayer;
 
 public class GameCode extends GameAPI {
 	
 	private static CropHandler cropHandler;
+	private static DebrisHandler debrisHandler;
 	
 	public void initialize () {
 		//Set the save file path
@@ -32,6 +34,7 @@ public class GameCode extends GameAPI {
 		MainLoop.getWindow ().setSize (1024, 576);
 		//Make the crop handler
 		cropHandler = new CropHandler ();
+		debrisHandler = new DebrisHandler ();
 	}
 	
 	public void gameLoop () {
@@ -40,6 +43,10 @@ public class GameCode extends GameAPI {
 	
 	public static CropHandler getCropHandler () {
 		return cropHandler;
+	}
+	
+	public static DebrisHandler getDebrisHandler () {
+		return debrisHandler;
 	}
 	
 }

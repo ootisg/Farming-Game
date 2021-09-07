@@ -201,6 +201,7 @@ public class Environment extends Saveable {
 		} else {
 			GameCode.getCropHandler ().frameEvent (); //Do crop growth
 		}
+		GameCode.getDebrisHandler ().frameEvent ();
 		
 		this.save ("" + monthCount + "," + monthDay);
 	}
