@@ -69,6 +69,9 @@ public class SaveFile {
 	}
 	
 	public void save (String objId, String data) {
+		if (objId == null || data == null) {
+			Thread.dumpStack ();
+		}
 		if (saveData.containsKey (objId)) {
 			saveData.get (objId).setData (data);
 		} else {

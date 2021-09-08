@@ -189,6 +189,14 @@ public abstract class GameItem implements Damageable {
 		return true;
 	}
 	
+	public static GameItem makeGameItem (String s) {
+		try {
+			return (GameItem)Class.forName (s).getConstructor ().newInstance ();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
 	@Override
 	public void damage (double amount) {
 		if (!getProperty ("health").equals ("")) {

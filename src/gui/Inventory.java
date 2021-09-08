@@ -64,6 +64,41 @@ public class Inventory extends GuiComponent implements ItemContainer {
 	}
 	
 	@Override
+	public String toString () {
+		StringBuilder invBuilder = new StringBuilder ();
+		for (int i = 0; i < items.size (); i++) {
+			GameItem curr = items.get (i);
+			if (curr == null) {
+				invBuilder.append ("null");
+			} else {
+				invBuilder.append (curr.getClass ().getSimpleName ());
+				invBuilder.append (" ");
+				invBuilder.append (curr.getCount ());
+			}
+			if (i != items.size () - 1) {
+				invBuilder.append (",");
+			}
+		}
+		return invBuilder.toString ();
+	}
+	
+	public void loadFromString (String s) {
+		if (s != null && !s.isEmpty ()) {
+			String[] split = s.split (",");
+			for (int i = 0; i < items.size (); i++) {
+				if (split [i].equals ("null")) {
+					items.set (i, null);
+				} else {
+					String[] params = split [i].split (" ");
+					GameItem it = GameItem.makeGameItem ("items." + params [0]);
+					it.setCount (Integer.parseInt (params [1]));
+					items.set (i, it);
+				}
+			}
+		}
+	}
+	
+	@Override
 	public void onDeclare () {
 
 	}

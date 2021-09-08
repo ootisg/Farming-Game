@@ -56,6 +56,7 @@ public class Gui extends GameObject {
 	public void pauseEvent () {
 		if (guiOpen && (keyPressed ('E') || keyPressed (KeyEvent.VK_ESCAPE))) {
 			guiOpen = false;
+			GlobalSave.saveInv (getInventory ().toString ());
 			MainLoop.resume ();
 		}
 		if (guiOpen) {

@@ -28,6 +28,7 @@ public class Debris extends Saveable {
 		try {
 			Debris d = (Debris)ObjectMatrix.makeInstance (splitStr [0]);
 			d.declare (Integer.parseInt (splitStr [1]), Integer.parseInt (splitStr [2]));
+			return d;
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
 			// TODO Auto-generated catch block

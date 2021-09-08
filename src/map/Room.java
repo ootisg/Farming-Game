@@ -15,6 +15,7 @@ import java.util.HashMap;
 import gameObjects.GameObjectLoader;
 import main.GameWindow;
 import main.GameAPI;
+import main.GameCode;
 import main.GameObject;
 import main.Hitbox;
 import main.MainLoop;
@@ -682,7 +683,9 @@ public class Room {
 		}
 	}
 	public void loadRoom (String path) throws FileNotFoundException {
+		GameCode.onRoomUnload ();
 		loadRMF (path);
+		GameCode.onRoomLoad ();
 		return;
 	}
 	public void loadRMF (String path) throws FileNotFoundException {

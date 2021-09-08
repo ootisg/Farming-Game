@@ -40,6 +40,15 @@ public class GameCode extends GameAPI {
 	public void gameLoop () {
 		//Runs once per frame
 	}
+
+	public static void onRoomUnload () {
+		cropHandler.saveAllCrops ();
+	}
+	
+	public static void onRoomLoad () {
+		cropHandler = new CropHandler ();
+		debrisHandler = new DebrisHandler ();
+	}
 	
 	public static CropHandler getCropHandler () {
 		return cropHandler;

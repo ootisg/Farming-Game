@@ -44,8 +44,8 @@ public class DebrisHandler extends Saveable {
 		for (int i = 0; i < DEBRIS_PER_DAY; i++) {
 			
 			//Choose the spawn coordinates
-			int rx = (int)(Math.random () * getRoom ().getWidth () - 1) * 16;
-			int ry = (int)(Math.random () * getRoom ().getHeight () - 1) * 16;
+			int rx = (int)(Math.random () * getRoom ().getWidth () - 2) * 16;
+			int ry = (int)(Math.random () * getRoom ().getHeight () - 2) * 16; //TODO revert OOB crash fix
 			
 			//Choose the debris type
 			double r = Math.random ();
@@ -126,8 +126,8 @@ public class DebrisHandler extends Saveable {
 			load ();
 			firstFrame = false;
 		}
-		if (globalDay != getGui ().getEnvironment ().getElapsedDays ()) {
-			globalDay = getGui ().getEnvironment ().getElapsedDays ();
+		while (globalDay < getGui ().getEnvironment ().getElapsedDays ()) {
+			globalDay++;
 			spawnDebris ();
 		}
 	}
@@ -138,7 +138,10 @@ public class DebrisHandler extends Saveable {
 			String[] split = getSaveData ().split (";");
 			globalDay = Integer.parseInt (split [0]);
 			for (int i = 1; i < split.length; i++) {
-				Debris.fromString (split [i]);
+				Debris d = Debris.fromString (split [i]);
+				if (d != null) {
+					addDebris (d);
+				}
 			}
 		}
 	}

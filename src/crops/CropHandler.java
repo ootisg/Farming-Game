@@ -38,6 +38,12 @@ public class CropHandler extends Saveable {
 			Entry<Point, GrowingCrop> currCrop = iter.next ();
 			currCrop.getValue ().attemptGrow ();
 		}
+		saveAllCrops ();
+	}
+	
+	public void saveAllCrops () {
+		Set<Entry<Point, GrowingCrop>> cropsSet = getCrops ().entrySet ();
+		Iterator<Entry<Point, GrowingCrop>> iter = cropsSet.iterator ();
 		iter = cropsSet.iterator ();
 		String crops = "";
 		while (iter.hasNext ()) {
@@ -77,7 +83,11 @@ public class CropHandler extends Saveable {
 		if (getSaveData () != null) {
 			String[] split = getSaveData ().split (";");
 			for (int i = 0; i < split.length; i++) {
-				GrowingCrop.fromString (split [i]);
+				GrowingCrop gc = GrowingCrop.fromString (split [i]);
+				if (gc != null) {
+					System.out.println ("CROPPPP");
+					addCrop (gc);
+				}
 			}
 		}
 	}
