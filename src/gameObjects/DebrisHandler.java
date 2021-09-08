@@ -15,6 +15,15 @@ public class DebrisHandler extends Saveable {
 
 	public static int DEBRIS_PER_DAY = 5;
 	
+	public static double BUSH_MIN = 0;
+	public static double BUSH_MAX = .2;
+	public static double ROCK_MIN = .2;
+	public static double ROCK_MAX = .4;
+	public static double STUMP_MIN = .4;
+	public static double STUMP_MAX = .5;
+	public static double TREE_MIN = .5;
+	public static double TREE_MAX = .55;
+	
 	private HashMap<Point, Debris> savedDebris;
 	
 	private boolean firstFrame = true;
@@ -33,24 +42,50 @@ public class DebrisHandler extends Saveable {
 		
 		//Spawn in the new debris
 		for (int i = 0; i < DEBRIS_PER_DAY; i++) {
+			
+			//Choose the spawn coordinates
 			int rx = (int)(Math.random () * getRoom ().getWidth () - 1) * 16;
 			int ry = (int)(Math.random () * getRoom ().getHeight () - 1) * 16;
-			//TODO allow other types of debris
-			Rock rock = new Rock ();
-			rock.declare (rx, ry);
-			if (getRoom ().isColliding (rock.getHitbox())) {
-				rock.forget ();
+			
+			//Choose the debris type
+			double r = Math.random ();
+			Debris toSpawn;
+			if (r > BUSH_MIN && r <= BUSH_MAX) {
+				toSpawn = new Bush ();
+			} else if (r > ROCK_MIN && r <= ROCK_MAX) {
+				toSpawn = new Rock ();
+			} else if (r > STUMP_MIN && r <= STUMP_MAX) {
+				toSpawn = new Stump ();
+			} else if (r > TREE_MIN && r <= TREE_MAX) {
+				toSpawn = new Tree ();
 			} else {
-				ArrayList<GameObject> allDebris = MainLoop.getObjectMatrix ().getAll (Debris.class);
-				for (int j = 0; j < allDebris.size (); j++) {
-					Debris d = (Debris)allDebris.get (j);
-					if (rock != d && rock.isColliding (d)) {
-						rock.forget ();
-					} else {
-						this.addDebris (rock);
+				toSpawn = null;
+			}
+			
+			//TODO allow other types of debris
+			if (toSpawn != null) {
+				
+				//Declare the new debris
+				toSpawn.declare (rx, ry);
+				
+				//Check to see if the debris can spawn in the chosen location
+				if (getRoom ().isColliding (toSpawn.getHitbox())) {
+					//Colliding with the tilemap
+					toSpawn.forget ();
+				} else {
+					//Colliding with other debris
+					ArrayList<GameObject> allDebris = MainLoop.getObjectMatrix ().getAll (Debris.class);
+					for (int j = 0; j < allDebris.size (); j++) {
+						Debris d = (Debris)allDebris.get (j);
+						if (toSpawn != d && toSpawn.isColliding (d)) {
+							toSpawn.forget ();
+						} else {
+							this.addDebris (toSpawn);
+						}
 					}
 				}
 			}
+			
 		}
 		
 		//Save all the debris
