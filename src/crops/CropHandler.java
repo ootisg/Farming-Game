@@ -1,6 +1,8 @@
 package crops;
 
 import java.awt.Point;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -8,61 +10,114 @@ import java.util.Set;
 
 import gameObjects.Saveable;
 import main.GameObject;
+import main.MainLoop;
+import main.ObjectMatrix;
 
 public class CropHandler extends Saveable {
-
-	private HashMap<Point, GrowingCrop> crops;
-	private int globalGrowth;
+	
+	private HashMap<String, SavedCrop> crops;
+	private int lastWaterCycle;
 	
 	private boolean firstFrame = true;
 	
 	public CropHandler () {
-		globalGrowth = 0;
+		lastWaterCycle = getGui ().getEnvironment ().getWaterCycle ();
+		setPersistent (true);
 	}
 	
 	public void addCrop (GrowingCrop crop) {
-		getCrops ().put (new Point ((int)crop.getX (), (int)crop.getY ()), crop);
+		if (!getAllSavedCrops ().containsKey (crop.getCropId ())) {
+			SavedCrop sc = new SavedCrop (crop.toString ());
+			sc.cropObject = crop;
+			getAllSavedCrops ().put (sc.getCropId (), sc);
+		}
 	}
 	
-	public HashMap<Point, GrowingCrop> getCrops () {
+	public void saveAll () {
+		Iterator<Entry<String, SavedCrop>> iter = getAllSavedCrops ().entrySet ().iterator ();
+		StringBuilder sb = new StringBuilder ();
+		while (iter.hasNext ()) {
+			sb.append (iter.next ().getValue ());
+			if (iter.hasNext ()) {
+				sb.append (";");
+			}
+		}
+		save (sb.toString ());
+	}
+	
+	private HashMap<String, SavedCrop> getAllSavedCrops () {
 		if (crops == null) {
-			crops = new HashMap<Point, GrowingCrop> ();
+			crops = new HashMap<String, SavedCrop> ();
 		}
 		return crops;
 	}
 	
 	public void growAll () {
-		Set<Entry<Point, GrowingCrop>> cropsSet = getCrops ().entrySet ();
-		Iterator<Entry<Point, GrowingCrop>> iter = cropsSet.iterator ();
+		Iterator<Entry<String, SavedCrop>> iter = getAllSavedCrops ().entrySet ().iterator ();
 		while (iter.hasNext ()) {
-			Entry<Point, GrowingCrop> currCrop = iter.next ();
-			currCrop.getValue ().attemptGrow ();
+			SavedCrop crop = iter.next ().getValue ();
+			growCrop (crop);
 		}
-		saveAllCrops ();
+		saveAll ();
 	}
 	
-	public void saveAllCrops () {
-		Set<Entry<Point, GrowingCrop>> cropsSet = getCrops ().entrySet ();
-		Iterator<Entry<Point, GrowingCrop>> iter = cropsSet.iterator ();
-		iter = cropsSet.iterator ();
-		String crops = "";
-		while (iter.hasNext ()) {
-			GrowingCrop crop = (GrowingCrop)iter.next ().getValue ();
-			crops += crop;
-			if (iter.hasNext ()) {
-				crops += ";";
+	public void growCrop (GrowingCrop crop) {
+		growCrop (crops.get (crop.getCropId ()));
+	}
+
+	private void growCrop (SavedCrop crop) {
+		if (getGui ().getEnvironment ().getWaterCycle () - crop.lastWatered <= 2) {
+			
+			//Get the crop growth parameters
+			//TODO this is slow
+			int growthTime = -1;
+			int maxGrowth = -1;
+			try {
+				GrowingCrop gc = (GrowingCrop)ObjectMatrix.makeInstance (crop.cropType);
+				growthTime = gc.getGrowthTime ();
+				maxGrowth = gc.getMaxGrowth ();
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+					| IllegalArgumentException | InvocationTargetException e) {
+				//Do nothing
+			}
+			
+			//Growth logic
+			if (growthTime != -1) {
+				if (crop.growthStage == 0) {
+					crop.growthStage = 1; //Grow immediately if seeds
+				} else {
+					crop.subGrowth++; //Grow slowly once sprouted
+					if (crop.subGrowth >= growthTime) {
+						crop.subGrowth = 0;
+						crop.growthStage++;
+					}
+					if (crop.growthStage > maxGrowth) {
+						crop.growthStage = maxGrowth;
+					}
+				}
+			}
+			
+			//Update the crop's object representation
+			if (crop.cropObject != null) {
+				crop.cropObject.updateCropState (crop.toString ());
 			}
 		}
-		save (crops);
+	}
+			
+	
+	public void harvest (GrowingCrop crop) {
+		crops.remove (crop.getCropId ());
 	}
 	
-	public static int getGlobalGrowthStage () {
-		int growthDay = getGui ().getEnvironment ().getMonthDay () + getGui ().getEnvironment ().getElapsedMonths () * 28;
-		int growthPhase = growthDay * 2;
-		if (getGui ().getEnvironment ().getGameTime () > 720000) {
-			growthPhase++;
+	public void water (GrowingCrop crop) {
+		crops.get (crop.getCropId ()).lastWatered = getGui ().getEnvironment ().getWaterCycle ();
+	}
+	
+	public void water (int tileX, int tileY) {
+		String cropId = getRoom ().getRoomName ().hashCode () + "," + tileX * 16 + "," + tileY * 16;
+		if (crops.containsKey (cropId)) {
+			crops.get (cropId).lastWatered = getGui ().getEnvironment ().getWaterCycle ();
 		}
-		return growthPhase;
 	}
 	
 	@Override
@@ -71,25 +126,72 @@ public class CropHandler extends Saveable {
 			load ();
 			firstFrame = false;
 		}
-		while (globalGrowth < getGlobalGrowthStage ()) {
-			//Grow crops until growth stage is matched
-			globalGrowth++;
+		while (lastWaterCycle < getGui ().getEnvironment ().getWaterCycle ()) {
 			growAll ();
+			saveAll ();
+			lastWaterCycle++;
 		}
+	}
+	
+	@Override
+	public String getSaveId () {
+		return "_GLOBAL,CropHandler";
 	}
 
 	@Override
-	public void load () {
+	public void load() {
 		if (getSaveData () != null) {
 			String[] split = getSaveData ().split (";");
 			for (int i = 0; i < split.length; i++) {
-				GrowingCrop gc = GrowingCrop.fromString (split [i]);
-				if (gc != null) {
-					System.out.println ("CROPPPP");
-					addCrop (gc);
+				String curr = split [i];
+				SavedCrop crop = new SavedCrop (curr);
+				getAllSavedCrops ().put (crop.getCropId (), crop);
+				if (crop.roomHash == getRoom ().getRoomName().hashCode ()) {
+					GrowingCrop gc = GrowingCrop.fromString (curr, false);
+					crop.setCropObject (gc);
 				}
 			}
 		}
+	}
+	
+	private class SavedCrop {
+		
+		public String cropType;
+		public int x;
+		public int y;
+		public int roomHash;
+		public int lastWatered;
+		public int growthStage;
+		public int subGrowth;
+		
+		public GrowingCrop cropObject;
+		
+		public SavedCrop (String cropString) {
+			if (!cropString.isEmpty ()) {
+				String[] cropSplit = cropString.split (",");
+				cropType = cropSplit [0];
+				x = Integer.parseInt (cropSplit [1]);
+				y = Integer.parseInt (cropSplit [2]);
+				roomHash = Integer.parseInt (cropSplit [3]);
+				lastWatered = Integer.parseInt (cropSplit [4]);
+				growthStage = Integer.parseInt (cropSplit [5]);
+				subGrowth = Integer.parseInt (cropSplit [6]);
+			}
+		}
+		
+		public void setCropObject (GrowingCrop crop) {
+			cropObject = crop;
+		}
+		
+		public String getCropId () {
+			return roomHash + "," + x + "," + y;
+		}
+		
+		@Override
+		public String toString () {
+			return cropType + "," + x + "," + y + "," + roomHash + "," + lastWatered + "," + growthStage + "," + subGrowth;
+		}
+		
 	}
 	
 }

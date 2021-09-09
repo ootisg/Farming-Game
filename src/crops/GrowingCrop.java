@@ -1,6 +1,7 @@
 package crops;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 
 import gui.Interactable;
 import main.GameCode;
@@ -12,6 +13,8 @@ public class GrowingCrop extends GameObject implements Interactable {
 
 	private int growthStage;
 	private int subGrowth;
+	private int lastWatered = -69;
+	private int roomHash;
 	
 	private int growthTime;
 	
@@ -19,6 +22,7 @@ public class GrowingCrop extends GameObject implements Interactable {
 		growthStage = 0;
 		subGrowth = 0;
 		growthTime = 0;
+		roomHash = getRoom ().getRoomName ().hashCode ();
 		createHitbox (0, 0, 16, 16);
 		getAnimationHandler ().setAnimationSpeed (0);
 	}
@@ -40,36 +44,8 @@ public class GrowingCrop extends GameObject implements Interactable {
 		return getSprite ().getFrameCount () - 1 == growthStage;
 	}
 	
-	public void attemptGrow () {
-		if (isWatered ()) {
-			grow ();
-		}
-	}
-	
-	public void grow () {
-		if (growthStage == 0) {
-			nextStage ();
-		} else {
-			if (subGrowth == growthTime) {
-				subGrowth = 0;
-				nextStage ();
-			} else {
-				subGrowth++;
-			}
-		}
-	}
-	
-	public void nextStage () {
-		if (!isFullyGrown ()) {
-			growthStage++;
-		}
-	}
-	
-	public void setGrowthStage (int stage) {
-		growthStage = stage;
-	}
-	
 	public void harvest () {
+		GameCode.getCropHandler ().harvest (this);
 		forget ();
 	}
 	
@@ -86,6 +62,18 @@ public class GrowingCrop extends GameObject implements Interactable {
 			}
 		}
 		return false;
+	}
+	
+	public String getCropId () {
+		return roomHash + "," + (int)getX () + "," + (int)getY ();
+	}
+	
+	public int getGrowthTime () {
+		return growthTime;
+	}
+	
+	public int getMaxGrowth () {
+		return getSprite ().getFrameCount () - 1;
 	}
 	
 	@Override
@@ -125,21 +113,34 @@ public class GrowingCrop extends GameObject implements Interactable {
 	
 	@Override
 	public String toString () {
-		return getClass ().getSimpleName () + "," + ((int)getX ()) + "," + ((int)getY ()) + "," + growthStage + "," + subGrowth;
+		return getClass ().getSimpleName () + "," + ((int)getX ()) + "," + ((int)getY ()) + "," + getRoom ().getRoomName ().hashCode () + "," + lastWatered + "," + growthStage + "," + subGrowth;
 	}
 	
-	public static GrowingCrop fromString (String str) {
+	public void updateCropState (String str) {
 		String[] parsed = str.split (",");
-		try {
-			GrowingCrop crop = (GrowingCrop)ObjectMatrix.makeInstance (parsed [0]);
-			crop.declare (Integer.parseInt (parsed [1]), Integer.parseInt (parsed [2]));
-			crop.setGrowthStage (Integer.parseInt (parsed [3]));
-			crop.subGrowth = (Integer.parseInt (parsed [4]));
-			return crop;
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		this.roomHash = Integer.parseInt (parsed [3]);
+		this.lastWatered = (Integer.parseInt (parsed [4]));
+		this.growthStage = (Integer.parseInt (parsed [5]));
+		this.subGrowth = (Integer.parseInt (parsed [6]));
+	}
+	
+	public static GrowingCrop fromString (String str, boolean matchRoom) {
+		String[] parsed = str.split (",");
+		if (!matchRoom || parsed [3] == "" + getRoom ().getRoomName ().hashCode ()) {
+			//ONLY returns a crop if the room hash is correct when matchRoom is true
+			try {
+				GrowingCrop crop = (GrowingCrop)ObjectMatrix.makeInstance (parsed [0]);
+				crop.declare (Integer.parseInt (parsed [1]), Integer.parseInt (parsed [2]));
+				crop.roomHash = Integer.parseInt (parsed [3]);
+				crop.lastWatered = (Integer.parseInt (parsed [4]));
+				crop.growthStage = (Integer.parseInt (parsed [5]));
+				crop.subGrowth = (Integer.parseInt (parsed [6]));
+				return crop;
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}

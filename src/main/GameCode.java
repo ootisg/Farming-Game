@@ -42,11 +42,11 @@ public class GameCode extends GameAPI {
 	}
 
 	public static void onRoomUnload () {
-		cropHandler.saveAllCrops ();
+		cropHandler.saveAll ();
 	}
 	
 	public static void onRoomLoad () {
-		cropHandler = new CropHandler ();
+		cropHandler.load ();
 		debrisHandler = new DebrisHandler ();
 	}
 	

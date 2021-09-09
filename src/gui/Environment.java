@@ -38,7 +38,7 @@ public class Environment extends Saveable {
 		todColor.addColor (new Color (0, 0, 10, 170), .85);
 		todColor.addColor (new Color (0, 0, 10, 170), 1);
 		
-		dayDurationMs = 600000;
+		dayDurationMs = 360000;
 		
 	}
 	
@@ -56,6 +56,10 @@ public class Environment extends Saveable {
 	
 	public int getElapsedDays () {
 		return monthCount * 28 + monthDay - 1;
+	}
+	
+	public int getWaterCycle () {
+		return getElapsedDays () * 2 + (dayDurationMs > 720000 ? 1 : 0);
 	}
 	
 	public int getElapsedMonths () {
@@ -155,6 +159,8 @@ public class Environment extends Saveable {
 	}
 	
 	public void waterTile (int tileX, int tileY) {
+		
+		//Update the tile
 		for (int i = 0; i < 3; i++) {
 			String strId = GameCode.getRoom ().getTileIdString (tileX, tileY, i);
 			String wateredTile = Environment.getWetVersion (strId);
@@ -162,6 +168,10 @@ public class Environment extends Saveable {
 				GameCode.getRoom ().setTile (i, tileX, tileY, wateredTile);
 			}
 		}
+		
+		//Update the crop at the tile
+		GameCode.getCropHandler ().water (tileX, tileY);
+		
 	}
 	
 	public void dryTile (int tileX, int tileY) {
@@ -188,6 +198,7 @@ public class Environment extends Saveable {
 		timeDisplay.setTime (getGameTime ());
 		timeDisplay.setWeekDay (getWeekDay ());
 		timeDisplay.setMonthDay (getMonthDay ());
+		GameCode.getCropHandler ().frameEvent ();
 		dayDurationMs += 33;
 		if (dayDurationMs > 1440000) { //1440000 ms is midnight
 			dayDurationMs = 360000;
@@ -196,10 +207,7 @@ public class Environment extends Saveable {
 				monthDay = 1;
 				monthCount++;
 			}
-			GameCode.getCropHandler ().frameEvent (); //Handle crop growth before drying/wetting soil
 			startDay ();
-		} else {
-			GameCode.getCropHandler ().frameEvent (); //Do crop growth
 		}
 		GameCode.getDebrisHandler ().frameEvent ();
 		
