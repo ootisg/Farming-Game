@@ -1,6 +1,7 @@
 package crops;
 
 import items.Tomato;
+import main.GameCode;
 
 public class GrowingTomato extends GrowingCrop {
 	
@@ -13,7 +14,7 @@ public class GrowingTomato extends GrowingCrop {
 	@Override
 	public void harvest () {
 		getGui ().getInventory ().addItem (new Tomato ());
-		this.setGrowthStage (3);
+		GameCode.getCropHandler ().setGrowthStage (this, 3);
 	}
 
 }

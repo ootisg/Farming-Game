@@ -48,6 +48,7 @@ public class Gui extends GameObject {
 			GameItem it = hotbar.getSelectedItem ();
 			if (it != null) {
 				it.use ();
+				GlobalSave.saveInv (getInventory ().toString ());
 			}
 		}
 		

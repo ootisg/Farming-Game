@@ -53,7 +53,7 @@ public class ItemDrop extends Saveable {
 	}
 	@Override
 	public void load () { 
-		if (("collected").equals (getSave ().getSaveData (getRoom ().getRoomName (), getSaveId ()))) {
+		if (("collected").equals (getSave ().getSaveData (getSaveId ()))) {
 			forget ();
 		}
 	}

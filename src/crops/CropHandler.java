@@ -113,6 +113,20 @@ public class CropHandler extends Saveable {
 		crops.get (crop.getCropId ()).lastWatered = getGui ().getEnvironment ().getWaterCycle ();
 	}
 	
+	public void setGrowthStage (GrowingCrop crop, int stage) {
+		
+		//Grow the crop to the desired stage
+		SavedCrop sc = crops.get (crop.getCropId ());
+		sc.growthStage = stage;
+		sc.subGrowth = 0;
+		
+		//Update the crop's object representation
+		if (sc.cropObject != null) {
+			sc.cropObject.updateCropState (sc.toString ());
+		}
+		
+	}
+	
 	public void water (int tileX, int tileY) {
 		String cropId = getRoom ().getRoomName ().hashCode () + "," + tileX * 16 + "," + tileY * 16;
 		if (crops.containsKey (cropId)) {
