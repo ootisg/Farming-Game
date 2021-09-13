@@ -91,7 +91,7 @@ public class Puzzle extends Saveable {
 	
 	@Override
 	public void load () {
-		if (("solved").equals (getSave ().getSaveData (getRoom ().getRoomName (), getSaveId ()))) {
+		if (("solved").equals (getSave ().getSaveData (getSaveId ()))) {
 			forget ();
 		}
 	}

@@ -45,6 +45,7 @@ public class GrowingCrop extends GameObject implements Interactable {
 	}
 	
 	public void harvest () {
+		getGui ().openTextbox ("YOU HARVESTED A CROP!");
 		GameCode.getCropHandler ().harvest (this);
 		forget ();
 	}

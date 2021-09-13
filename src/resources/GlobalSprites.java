@@ -50,6 +50,7 @@ public class GlobalSprites {
 	public Sprite playerArmsIdle = new Sprite (playerArmSheet, new int[] {0, 0, 0, 0}, new int[] {0, 16, 32, 48}, 16, 16);
 	public Sprite rockSprite = new Sprite (rockSheet, 16, 16);
 	public Sprite stumpSprite = new Sprite (stumpSheet, 16, 16);
+	public Sprite textboxSprite = new Sprite ("resources/sprites/textbox.png");
 	public Sprite treeSprite = new Sprite (treeSheet, 32, 48);
 	public Sprite uiNumSprite = new Sprite (uiNumSheet, 6, 7);
 	public Sprite uiPmAmSprite = new Sprite (uiPmAmSheet, 16, 7);

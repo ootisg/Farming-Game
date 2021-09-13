@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 
 import crops.GrowingPotato;
 import gameObjects.GlobalSave;
+import gameObjects.Textbox;
 import items.GameItem;
 import json.JSONObject;
 import main.GameAPI;
@@ -23,6 +24,8 @@ public class Gui extends GameObject {
 	private Hotbar hotbar;
 	private TimeOverlay timeOverlay;
 	private Environment environment;
+	private Textbox textbox;
+	private boolean textboxOpen;
 	public Gui () {
 		this.declare (0, 0);
 		this.setPersistent (true);
@@ -32,6 +35,7 @@ public class Gui extends GameObject {
 		timeOverlay = new TimeOverlay ();
 		environment = new Environment ();
 		environment.setTimeDisplay (timeOverlay);
+		textbox = new Textbox ();
 	}
 	@Override
 	public void frameEvent () {
@@ -39,9 +43,16 @@ public class Gui extends GameObject {
 			guiOpen = true;
 			MainLoop.pause ();
 		}
-		if (!guiOpen) {
+		if (!guiOpen && !textboxOpen) {
 			environment.frameEvent (); //Environment state only advances when not paused
 			hotbar.frameEvent ();
+		}
+		
+		if (textboxOpen) {
+			if (keyPressed (KeyEvent.VK_ENTER)) {
+				closeTextbox ();
+			}
+			textbox.frameEvent ();
 		}
 		
 		if (GameAPI.mouseClicked () && !GameAPI.getGui ().getHotbar ().wasClicked ()) {
@@ -68,10 +79,15 @@ public class Gui extends GameObject {
 	public void draw () {
 		if (guiOpen) {
 			inventory.draw ();
-		} else {
+		} else if (!textboxOpen) {
 			hotbar.draw ();
 		}
 		timeOverlay.draw ();
+		
+		//Draw the textbox over everything else
+		if (textboxOpen) {
+			textbox.draw ();
+		}
 		
 		//Draw the environment overlay effects after everything else
 		environment.draw ();
@@ -98,5 +114,15 @@ public class Gui extends GameObject {
 	}
 	public Hotbar getHotbar () {
 		return hotbar;
+	}
+	public Textbox getTextbox () {
+		return textbox;
+	}
+	public void openTextbox (String s) {
+		textbox.openBox (s);
+		textboxOpen = true;
+	}
+	public void closeTextbox () {
+		textboxOpen = false;
 	}
 }
