@@ -1,7 +1,15 @@
 package gameObjects;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 import gui.GuiComponent;
 import main.GameObject;
+import main.MainLoop;
 
 public class Textbox extends GuiComponent {
 
@@ -10,6 +18,10 @@ public class Textbox extends GuiComponent {
 	String text;
 	int framePos;
 	int cursorPos;
+	
+	public static final int PADDING_TOP = 8;
+	public static final int PADDING_LEFT = 8;
+	public static final int TEXT_AREA_WIDTH = 444;
 	
 	public Textbox () {
 		setX (24);
@@ -40,7 +52,41 @@ public class Textbox extends GuiComponent {
 	
 	@Override
 	public void draw () {
+		
+		//Draw the background
 		getSprite ().draw ((int)getX (), (int)getY ());
+		
+		//Setup for text
+		Graphics g = MainLoop.getWindow ().getBufferGraphics ();
+		Font f = new Font ("Arial", 12, 12);
+		g.setFont (f);
+		FontMetrics fm = g.getFontMetrics();
+		
+		//Calculate text to draw
+		ArrayList<String> lines = new ArrayList<String> ();
+		Scanner s = new Scanner (text); //TODO make this use displayText
+		String currLine = "";
+		while (s.hasNext ()) {
+			String word = s.next ();
+			String withWord = currLine + word;
+			if (fm.stringWidth (withWord) > TEXT_AREA_WIDTH) {
+				lines.add (currLine);
+				currLine = word + " ";
+			} else {
+				currLine = withWord + " ";
+			}
+		}
+		if (!currLine.isEmpty ()) {
+			lines.add (currLine);
+		}
+		s.close ();
+		
+		//Draw text
+		g.setColor (Color.BLACK);
+		for (int i = 0; i < lines.size (); i++) {
+			g.drawString (lines.get (i), (int)getX () + PADDING_LEFT, (int)getY () + fm.getAscent () + PADDING_TOP + i * fm.getHeight ());
+		}
+		
 	}
 	
 }
