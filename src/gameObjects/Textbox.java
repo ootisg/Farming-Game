@@ -15,9 +15,15 @@ public class Textbox extends GuiComponent {
 
 	//NOTE: not intended to be declared
 	
-	String text;
-	int framePos;
-	int cursorPos;
+	public static final int TBOX_SCROLLING = 0;
+	public static final int TBOX_WAITING = 1;
+	
+	private String text;
+	private int framePos;
+	private int cursorPos;
+	private int cursorTime;
+	
+	private int state = TBOX_SCROLLING;
 	
 	public static final int PADDING_TOP = 8;
 	public static final int PADDING_LEFT = 8;
@@ -41,13 +47,24 @@ public class Textbox extends GuiComponent {
 		this.text = text;
 	}
 	
-	public void getDisplayText (int startPos, int endPos) {
-		
+	public String getDisplayText (int startPos, int endPos) {
+		return text.substring (startPos, endPos);
 	}
 	
 	@Override
 	public void frameEvent () {
 		super.frameEvent ();
+		if (state == TBOX_SCROLLING) {
+			cursorTime++;
+			if (cursorTime > 5) {
+				cursorPos++;
+			}
+			if (cursorPos >= text.length ()) {
+				state = TBOX_WAITING;
+			}
+		} else if (state == TBOX_WAITING) {
+			//Do nothing TODO make responsive
+		}
 	}
 	
 	@Override
@@ -64,7 +81,7 @@ public class Textbox extends GuiComponent {
 		
 		//Calculate text to draw
 		ArrayList<String> lines = new ArrayList<String> ();
-		Scanner s = new Scanner (text); //TODO make this use displayText
+		Scanner s = new Scanner (getDisplayText (framePos, cursorPos)); //TODO make this use displayText
 		String currLine = "";
 		while (s.hasNext ()) {
 			String word = s.next ();
