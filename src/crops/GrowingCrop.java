@@ -45,7 +45,7 @@ public class GrowingCrop extends GameObject implements Interactable {
 	}
 	
 	public void harvest () {
-		getGui ().openTextbox ("YOU HARVESTED A CROP! YOU GOT A TOKEN PROVING YOU DESTROYED IT! (THIS TESTS THE AUTO LINE SPLITTING.)");
+		getGui ().openTextbox ("YOU HARVESTED A CROP! YOU GOT A TOKEN PROVING YOU DESTROYED IT!&wait 5& (THIS TESTS THE AUTO LINE SPLITTING.)&fEnd&bottom text");
 		GameCode.getCropHandler ().harvest (this);
 		forget ();
 	}

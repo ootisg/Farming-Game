@@ -49,7 +49,7 @@ public class Gui extends GameObject {
 		}
 		
 		if (textboxOpen) {
-			if (keyPressed (KeyEvent.VK_ENTER)) {
+			if (keyPressed (KeyEvent.VK_ENTER) && textbox.getState () == Textbox.TBOX_WAITING_CLOSE) {
 				closeTextbox ();
 			}
 			textbox.frameEvent ();
