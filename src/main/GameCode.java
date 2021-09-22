@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import animals.FarmAnimal;
 import crops.CropHandler;
 import gameObjects.DebrisHandler;
 import gameObjects.GlobalSave;
@@ -35,6 +36,7 @@ public class GameCode extends GameAPI {
 		//Make the crop handler
 		cropHandler = new CropHandler ();
 		debrisHandler = new DebrisHandler ();
+		new FarmAnimal ().declare (256, 256);
 	}
 	
 	public void gameLoop () {

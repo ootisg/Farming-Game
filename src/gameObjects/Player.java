@@ -29,6 +29,7 @@ public class Player extends GameObject implements Damageable {
 	public static final int DIRECTION_LEFT = 1;
 	public static final int DIRECTION_DOWN = 2;
 	public static final int DIRECTION_RIGHT = 3;
+	
 	public static final double[] RADIAN_DIRECTION_MAP = new double[] {Projectile.DIRECTION_UP, Projectile.DIRECTION_LEFT, Projectile.DIRECTION_DOWN, Projectile.DIRECTION_RIGHT};
 	public static final Vector2D[] VECTOR_DIRECTION_MAP = new Vector2D[] {
 			Projectile.VEC_DIRECTION_UP,

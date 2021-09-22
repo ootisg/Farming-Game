@@ -5,6 +5,7 @@ package resources;
 public class GlobalSprites {
 	//Please alphebitize spritesheets and sprites
 	//Spritesheets
+	public Spritesheet animalSheetChicken = new Spritesheet ("resources/sprites/chicken animations.png");
 	public Spritesheet bubbleSheet = new Spritesheet ("resources/sprites/bubbles.png");
 	public Spritesheet bushSheet = new Spritesheet ("resources/sprites/bush.png");
 	public Spritesheet cropSheetCarrot = new Spritesheet ("resources/sprites/crops/carrot.png");
@@ -30,6 +31,12 @@ public class GlobalSprites {
 	public Spritesheet uiSheet = new Spritesheet ("resources/sprites/ui.png");
 	public Spritesheet uiWeekSheet = new Spritesheet ("resources/sprites/ui_weekday.png");
 	//Sprites
+	public Sprite animalSpriteChickenDown = new Sprite (animalSheetChicken, new int[] {0, 16, 32, 48}, new int[] {0, 0, 0, 0}, 16, 16);
+	public Sprite animalSpriteChickenUp = new Sprite (animalSheetChicken, new int[] {0, 16, 32, 48}, new int[] {16, 16, 16, 16}, 16, 16);
+	public Sprite animalSpriteChickenLeft = new Sprite (animalSheetChicken, new int[] {0, 16, 32, 48}, new int[] {32, 32, 32, 32}, 16, 16);
+	public Sprite animalSpriteChickenRight = new Sprite (animalSheetChicken, new int[] {0, 16, 32, 48}, new int[] {48, 48, 48, 48}, 16, 16);
+	public Sprite animalSpriteChickenSleep = new Sprite (animalSheetChicken, new int[] {0, 16, 32, 48}, new int[] {64, 64, 64, 64}, 16, 16);
+	public Sprite animalSpriteChickenLove = new Sprite (animalSheetChicken, new int[] {0, 16, 32, 48}, new int[] {80, 80, 80, 80}, 16, 16);
 	public Sprite bubbleSprite = new Sprite (bubbleSheet, 16, 16);
 	public Sprite bushSprite = new Sprite (bushSheet, 16, 16);
 	public Sprite cropSpriteCarrot = new Sprite (cropSheetCarrot, 16, 16);
