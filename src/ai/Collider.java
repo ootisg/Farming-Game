@@ -1,5 +1,6 @@
 package ai;
 
+import gameObjects.Player;
 import main.GameObject;
 import main.Hitbox;
 
@@ -17,6 +18,6 @@ public class Collider extends GameObject {
 	}
 	
 	protected boolean collidingWithBarrier () {
-		return getRoom ().isColliding (getHitbox ()) || isColliding ("gameObjects.Tree");
+		return Player.collidingWithBarrier (this);
 	}
 }

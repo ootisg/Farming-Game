@@ -66,28 +66,28 @@ public class Player extends GameObject implements Damageable {
 		if (keyCheck ('W')) {
 			direction = DIRECTION_UP;
 			setY (getY () - speed);
-			if (!noclip && collidingWithBarrier ()) {
+			if (!noclip && collidingWithBarrier (this)) {
 				this.backstepY ();
 			}
 		}
 		if (keyCheck ('A')) {
 			direction = DIRECTION_LEFT;
 			setX (getX () - speed);
-			if (!noclip && collidingWithBarrier ()) {
+			if (!noclip && collidingWithBarrier (this)) {
 				this.backstepX ();
 			}
 		}
 		if (keyCheck ('S')) {
 			direction = DIRECTION_DOWN;
 			setY (getY () + speed);
-			if (!noclip && collidingWithBarrier ()) {
+			if (!noclip && collidingWithBarrier (this)) {
 				this.backstepY ();
 			}
 		}
 		if (keyCheck ('D')) {
 			direction = DIRECTION_RIGHT;
 			setX (getX () + speed);
-			if (!noclip && collidingWithBarrier ()) {
+			if (!noclip && collidingWithBarrier (this)) {
 				this.backstepX ();
 			}
 		}
@@ -150,35 +150,39 @@ public class Player extends GameObject implements Damageable {
 		super.draw ();
 		armSprite.draw ((int)getX () - getRoom ().getViewX(), (int)getY () - getRoom ().getViewY (), getAnimationHandler ().getFrame ());
 	}
-	public boolean collidingWithBarrier () {
-		if (getRoom ().isColliding (getHitbox ())) {
+	
+	public static boolean collidingWithBarrier (GameObject obj) {
+		if (getRoom ().isColliding (obj.getHitbox ())) {
 			return true;
-		}
-		if (isColliding ("gameObjects.OverpassBarrier")) {
-			ArrayList<GameObject> overpasses = this.getCollidingObjects ("gameObjects.Overpass");
-			for (int i = 0; i < overpasses.size (); i++) {
-				if (((Overpass)overpasses.get (i)).isUnderPlayer ()) {
-					return true;
-				}
-			}
-		}
-		if (isColliding ("gameObjects.LayerCollider")) {
-			ArrayList<GameObject> layerColliders = this.getCollidingObjects ("gameObjects.LayerCollider");
-			int playerLayer = Integer.parseInt (getVariantAttribute ("layer"));
-			for (int i = 0; i < layerColliders.size (); i++) {
-				if (playerLayer == ((LayerCollider)layerColliders.get (i)).getLayer ()) {
-					return true;
-				}
-			}
 		}
 		ArrayList<GameObject> solids = MainLoop.getObjectMatrix ().getAll (Debris.class);
 		for (int i = 0; i < solids.size (); i++) {
-			if (isColliding (solids.get (i))) {
+			if (obj.isColliding (solids.get (i))) {
 				return true;
+			}
+		}
+		if (obj instanceof Player) {
+			if (obj.isColliding ("gameObjects.OverpassBarrier")) {
+				ArrayList<GameObject> overpasses = obj.getCollidingObjects ("gameObjects.Overpass");
+				for (int i = 0; i < overpasses.size (); i++) {
+					if (((Overpass)overpasses.get (i)).isUnderPlayer ()) {
+						return true;
+					}
+				}
+			}
+			if (obj.isColliding ("gameObjects.LayerCollider")) {
+				ArrayList<GameObject> layerColliders = obj.getCollidingObjects ("gameObjects.LayerCollider");
+				int playerLayer = Integer.parseInt (obj.getVariantAttribute ("layer"));
+				for (int i = 0; i < layerColliders.size (); i++) {
+					if (playerLayer == ((LayerCollider)layerColliders.get (i)).getLayer ()) {
+						return true;
+					}
+				}
 			}
 		}
 		return false; 
 	}
+	
 	public void focusView () {
 		int windowWidth = MainLoop.getWindow ().getResolution () [0];
 		int windowHeight = MainLoop.getWindow ().getResolution () [1];
