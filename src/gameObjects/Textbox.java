@@ -45,6 +45,7 @@ public class Textbox extends GuiComponent {
 		this.text = text;
 		framePos = 0;
 		cursorPos = 0;
+		state = TBOX_SCROLLING;
 	}
 	
 	public void setText (String text) {
@@ -69,7 +70,6 @@ public class Textbox extends GuiComponent {
 	public void frameEvent () {
 		
 		super.frameEvent ();
-		
 		if (state == TBOX_SCROLLING) {
 			
 			//Increase the frame count
