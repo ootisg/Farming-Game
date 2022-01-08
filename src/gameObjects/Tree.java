@@ -1,5 +1,7 @@
 package gameObjects;
 
+import java.util.Random;
+
 import gui.Interactable;
 import items.GameItem;
 import items.Stone;
@@ -17,7 +19,8 @@ public class Tree extends Debris implements Interactable {
 	public void onDeclare () {
 		String type = getVariantAttribute ("type");
 		if (type == null) {
-			type = "" + (int)(Math.random () * 2);
+			Random r = new Random ((long)(getX () * 476710937 + getY () * 98960489) + 13931213);
+			type = "" + (int)(r.nextDouble () * 2);
 		}
 		switch (type) {
 			case "0":

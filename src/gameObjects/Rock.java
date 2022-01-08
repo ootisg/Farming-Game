@@ -1,5 +1,7 @@
 package gameObjects;
 
+import java.util.Random;
+
 import gui.Interactable;
 import items.Stone;
 import main.GameObject;
@@ -16,7 +18,9 @@ public class Rock extends Debris implements Interactable {
 	public void onDeclare () {
 		String type = getVariantAttribute ("type");
 		if (type == null) {
-			type = "" + (int)(Math.random () * getSprite ().getFrameCount());
+			Random r = new Random ((long)(getX () * 476710937 + getY () * 98960489) + 13931213);
+			type = "" + (int)(r.nextDouble () * getSprite ().getFrameCount());
+			setVariantAttribute ("type", type);
 		}
 		getAnimationHandler ().setFrame (Integer.parseInt (type));
 	}
