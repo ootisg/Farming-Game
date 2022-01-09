@@ -7,6 +7,8 @@ import main.GameObject;
 
 public class Door extends GameObject implements Interactable {
 
+	private boolean interacted = false;
+	
 	public Door () {
 		setSprite (getSprites ().doorStdSprite);
 		getAnimationHandler ().setAnimationSpeed (0);
@@ -27,15 +29,25 @@ public class Door extends GameObject implements Interactable {
 
 	@Override
 	public void click() {
-		getGui ().getEnvironment ().skipDay ();
-		try {
-			getRoom ().loadRoom ("resources/maps/farm.rmf");
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		interacted = true;
+		getGui ().openTextbox ("YOU WENT TO SLEEP FOR THE NIGHT.");
 	}
 
+	@Override
+	public void frameEvent () {
+		super.frameEvent ();
+		if (interacted && !getGui ().isTextboxOpen ()) {
+			interacted = false;
+			getGui ().getEnvironment ().skipDay ();
+			try {
+				getRoom ().loadRoom ("resources/maps/farm.rmf");
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	@Override
 	public boolean useDefaultHover() {
 		return true;

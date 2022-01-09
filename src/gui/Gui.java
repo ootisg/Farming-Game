@@ -125,4 +125,7 @@ public class Gui extends GameObject {
 	public void closeTextbox () {
 		textboxOpen = false;
 	}
+	public boolean isTextboxOpen () {
+		return textboxOpen;
+	}
 }
