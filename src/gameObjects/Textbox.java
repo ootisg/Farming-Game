@@ -20,6 +20,7 @@ public class Textbox extends GuiComponent {
 	public static final int TBOX_WAITING_ADVANCE = 1;
 	public static final int TBOX_WAITING_CLOSE = 2;
 	public static final int TBOX_WAITING_TIMER = 3;
+	public static final int TBOX_INSTANT_SCROLL = 4;
 	
 	private String text;
 	private int framePos;
@@ -81,7 +82,7 @@ public class Textbox extends GuiComponent {
 				//Increment the cursor position
 				cursorPos++;
 				
-				//Instantly scroll over any special instructions, if needed
+				//Instantly run and scroll over any special instructions, if needed
 				if (cursorPos < text.length () && text.charAt (cursorPos) == '&') {
 					cursorPos++;
 					StringBuilder instruction = new StringBuilder ();
@@ -92,6 +93,17 @@ public class Textbox extends GuiComponent {
 					boolean nextChar = runInstruction (instruction.toString ());
 					if (nextChar) {
 						cursorPos++;
+					}
+					if (state == TBOX_INSTANT_SCROLL) {
+						while (cursorPos < text.length ()) {
+							cursorPos++;
+							if (text.substring (cursorPos - 5, cursorPos + 1).equals ("&skip&")) {
+								System.out.println ("CHAR: " + text.charAt (cursorPos));
+								state = TBOX_SCROLLING;
+								break;
+							}
+						}
+						
 					}
 				}
 				
@@ -137,6 +149,9 @@ public class Textbox extends GuiComponent {
 			int waitTime = Integer.parseInt (params [1]);
 			this.waitTime = waitTime;
 			state = TBOX_WAITING_TIMER;
+			return false;
+		} else if (instruction.length () >= 4 && instruction.substring (0, 4).equals ("skip")) {
+			state = TBOX_INSTANT_SCROLL;
 			return false;
 		}
 		return true; //Default case
