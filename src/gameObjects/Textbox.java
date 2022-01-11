@@ -14,6 +14,7 @@ import main.MainLoop;
 
 public class Textbox extends GuiComponent {
 
+	//TODO crash if textbox text starts with instruction
 	//NOTE: not intended to be declared
 	
 	public static final int TBOX_SCROLLING = 0;
@@ -171,20 +172,25 @@ public class Textbox extends GuiComponent {
 		
 		//Calculate text to draw
 		ArrayList<String> lines = new ArrayList<String> ();
-		Scanner s = new Scanner (getDisplayText (framePos, cursorPos)); //TODO make this use displayText
+		Scanner s = new Scanner (getDisplayText (framePos, cursorPos));
+		Scanner lineScanner = new Scanner (getDisplayText (framePos, cursorPos));
 		String currLine = "";
-		while (s.hasNext ()) {
-			String word = s.next ();
-			String withWord = currLine + word;
-			if (fm.stringWidth (withWord) > TEXT_AREA_WIDTH) {
-				lines.add (currLine);
-				currLine = word + " ";
-			} else {
-				currLine = withWord + " ";
+		while (lineScanner.hasNextLine ()) {
+			s = new Scanner (lineScanner.nextLine ());
+			while (s.hasNext ()) {
+				String word = s.next ();
+				String withWord = currLine + word;
+				if (fm.stringWidth (withWord) > TEXT_AREA_WIDTH) {
+					lines.add (currLine);
+					currLine = word + " ";
+				} else {
+					currLine = withWord + " ";
+				}
 			}
-		}
-		if (!currLine.isEmpty ()) {
-			lines.add (currLine);
+			if (!currLine.isEmpty ()) {
+				lines.add (currLine);
+			}
+			currLine = "";
 		}
 		s.close ();
 		
