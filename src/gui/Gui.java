@@ -52,6 +52,9 @@ public class Gui extends GameObject {
 			if (keyPressed (KeyEvent.VK_ENTER) && textbox.getState () == Textbox.TBOX_WAITING_CLOSE) {
 				closeTextbox ();
 			}
+			if (textbox.getState () == Textbox.TBOX_FORCE_CLOSED) {
+				closeTextbox ();
+			}
 			textbox.frameEvent ();
 		}
 		
@@ -127,5 +130,8 @@ public class Gui extends GameObject {
 	}
 	public boolean isTextboxOpen () {
 		return textboxOpen;
+	}
+	public int getTextboxSelection () {
+		return textbox.getSelection ();
 	}
 }

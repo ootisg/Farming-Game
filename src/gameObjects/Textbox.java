@@ -22,6 +22,8 @@ public class Textbox extends GuiComponent {
 	public static final int TBOX_WAITING_CLOSE = 2;
 	public static final int TBOX_WAITING_TIMER = 3;
 	public static final int TBOX_INSTANT_SCROLL = 4;
+	public static final int TBOX_SELECTION_MODE = 5;
+	public static final int TBOX_FORCE_CLOSED = 6;
 	
 	private String text;
 	private int framePos;
@@ -30,6 +32,10 @@ public class Textbox extends GuiComponent {
 	private int waitTime;
 	
 	private int state = TBOX_SCROLLING;
+	
+	private ArrayList<Integer> selectableLines = new ArrayList<Integer> ();
+	private int selectedLine = -1;
+	private int lastSelection = -1;
 	
 	public static final int PADDING_TOP = 8;
 	public static final int PADDING_LEFT = 8;
@@ -68,8 +74,35 @@ public class Textbox extends GuiComponent {
 		return retText.toString ();
 	}
 	
+	public int getLineOf (int y) {
+		Graphics g = MainLoop.getWindow ().getBufferGraphics ();
+		Font f = new Font ("Arial", 12, 12);
+		g.setFont (f);
+		FontMetrics fm = g.getFontMetrics();
+		int startY = PADDING_TOP;
+		int lineHeight = fm.getHeight ();
+		int adjY = y - startY;
+		return adjY / lineHeight;
+	}
+	
+	public int getSelection () {
+		return lastSelection;
+	}
+	
 	@Override
 	public void frameEvent () {
+		
+		if (state == TBOX_SELECTION_MODE) {
+			int lineIdx = getLineOf (getMouseY () - (int)getY ());
+			if (selectableLines.contains (lineIdx)) {
+				selectedLine = lineIdx;
+			}
+			if (mouseClicked () && selectableLines.contains (lineIdx)) {
+				lastSelection = lineIdx;
+				selectedLine = -1;
+				state = TBOX_SCROLLING;
+			}
+		}
 		
 		super.frameEvent ();
 		if (state == TBOX_SCROLLING) {
@@ -104,8 +137,8 @@ public class Textbox extends GuiComponent {
 								break;
 							}
 						}
-						
 					}
+					
 				}
 				
 			}
@@ -154,6 +187,17 @@ public class Textbox extends GuiComponent {
 		} else if (instruction.length () >= 4 && instruction.substring (0, 4).equals ("skip")) {
 			state = TBOX_INSTANT_SCROLL;
 			return false;
+		} else if (instruction.length () >= 3 && instruction.substring (0, 3).equals ("sel")) {
+			state = TBOX_SELECTION_MODE;
+			selectableLines = new ArrayList<Integer> ();
+			for (int i = 3; i < instruction.length (); i++) {
+				int lineIdx = instruction.charAt (i) - '0';
+				selectableLines.add (lineIdx);
+			}
+			return false;
+		} else if (instruction.length () >= 5 && instruction.substring (0, 5).equals ("close")) {
+			state = TBOX_FORCE_CLOSED;
+			return false;
 		}
 		return true; //Default case
 	}
@@ -197,6 +241,11 @@ public class Textbox extends GuiComponent {
 		//Draw text
 		g.setColor (Color.BLACK);
 		for (int i = 0; i < lines.size (); i++) {
+			if (i == selectedLine) {
+				g.setColor (new Color (0x00, 0x00, 0x00, 0x40));
+				g.fillRect ((int)getX () + PADDING_LEFT, (int)getY () + PADDING_TOP + i * fm.getHeight (), TEXT_AREA_WIDTH, fm.getHeight ());
+			}
+			g.setColor (Color.BLACK);
 			g.drawString (lines.get (i), (int)getX () + PADDING_LEFT, (int)getY () + fm.getAscent () + PADDING_TOP + i * fm.getHeight ());
 		}
 		

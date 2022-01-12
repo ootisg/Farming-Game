@@ -30,13 +30,13 @@ public class Door extends GameObject implements Interactable {
 	@Override
 	public void click() {
 		interacted = true;
-		getGui ().openTextbox ("YOU WENT TO SLEEP FOR THE\nNIGHT.");
+		getGui ().openTextbox (" GO TO SLEEP FOR THE NIGHT?\n&skip&YES\n NO&skip&&sel12&&close&");
 	}
 
 	@Override
 	public void frameEvent () {
 		super.frameEvent ();
-		if (interacted && !getGui ().isTextboxOpen ()) {
+		if (interacted && !getGui ().isTextboxOpen () && getGui ().getTextboxSelection () == 1) {
 			interacted = false;
 			getGui ().getEnvironment ().skipDay ();
 			try {
