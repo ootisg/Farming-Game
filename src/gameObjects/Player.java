@@ -44,7 +44,6 @@ public class Player extends GameObject implements Damageable {
 		this.createHitbox (4, 1, 8, 14);
 		this.setVariantAttribute ("layer", "0");
 		bubble = new InteractBubble (32);
-		bubble.declare (0, 0);
 		setMaxHealth (50);
 		setHealth (50);
 		setPriority (-1);
@@ -278,4 +277,9 @@ public class Player extends GameObject implements Damageable {
 				return new Vector2D (0, 0);
 		}
 	}
+	
+	public InteractBubble getInteractBubble () {
+		return bubble;
+	}
+	
 }

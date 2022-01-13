@@ -58,11 +58,14 @@ public class Gui extends GameObject {
 			textbox.frameEvent ();
 		}
 		
-		if (GameAPI.mouseClicked () && !GameAPI.getGui ().getHotbar ().wasClicked ()) {
-			GameItem it = hotbar.getSelectedItem ();
-			if (it != null) {
-				it.use ();
-				GlobalSave.saveInv (getInventory ().toString ());
+		boolean interacted = getPlayer ().getInteractBubble ().interactFrame ();
+		if (!interacted) {
+			if (GameAPI.mouseClicked () && !GameAPI.getGui ().getHotbar ().wasClicked ()) {
+				GameItem it = hotbar.getSelectedItem ();
+				if (it != null) {
+					it.use ();
+					GlobalSave.saveInv (getInventory ().toString ());
+				}
 			}
 		}
 		

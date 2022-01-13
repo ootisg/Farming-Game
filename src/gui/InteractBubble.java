@@ -56,9 +56,8 @@ public class InteractBubble extends GameObject {
 	public void setDefaultHoverColor (int r, int g, int b, int a) {
 		defaultHoverColor = new int[] {r, g, b, a};
 	}
-	
-	@Override
-	public void frameEvent () {
+
+	public boolean interactFrame () {
 		
 		//Get the interactables and mouse coords
 		ArrayList<GameObject> interactables = MainLoop.getObjectMatrix ().getAll (Interactable.class);
@@ -90,6 +89,7 @@ public class InteractBubble extends GameObject {
 				}
 				if (hoveredObj == curr && mouseClicked ()) {
 					curr.click ();
+					return true;
 				}
 			} else {
 				if (interactables.get (i) == hoveredObj) {
@@ -112,6 +112,9 @@ public class InteractBubble extends GameObject {
 				hoveredObj = null;
 			}
 		}
+		
+		return false;
+		
 	}
 	
 	private void defaultHover (Interactable obj) {
