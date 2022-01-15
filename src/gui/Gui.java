@@ -3,6 +3,7 @@ package gui;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.FileNotFoundException;
 
 import crops.GrowingPotato;
 import gameObjects.GlobalSave;
@@ -42,6 +43,15 @@ public class Gui extends GameObject {
 		if (keyPressed('E')) {
 			guiOpen = true;
 			MainLoop.pause ();
+		}
+		if (keyPressed('P')) {
+			getEnvironment ().skipDay ();
+			try {
+				getRoom ().loadRoom ("resources/maps/farm.rmf");
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		if (!guiOpen && !textboxOpen) {
 			environment.frameEvent (); //Environment state only advances when not paused

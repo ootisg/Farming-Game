@@ -2,6 +2,7 @@ package gameObjects;
 
 import java.util.Random;
 
+import gui.Environment.Season;
 import gui.Interactable;
 import items.BeetSeeds;
 import items.CarrotSeeds;
@@ -51,8 +52,8 @@ public class Bush extends Debris implements Interactable {
 		getGui ().getInventory ().addItem (new Hay ());
 		if (Math.random () < .1) {
 			//Drop rolled for seeds (10%)
-			int season = (int)(Math.random () * 3); //TODO swap based on actual season
-			if (season == 0) {
+			Season season = getGui ().getEnvironment ().getSeason ();
+			if (season == Season.SPRING) {
 				//Spring seeds
 				int rollVal = (int)(Math.random () * 3);
 				switch (rollVal) {
@@ -67,7 +68,7 @@ public class Bush extends Debris implements Interactable {
 						break;
 				}
 			}
-			if (season == 1) {
+			if (season == Season.SUMMER) {
 				//Summer seeds
 				int rollVal = (int)(Math.random () * 3);
 				switch (rollVal) {
@@ -82,7 +83,7 @@ public class Bush extends Debris implements Interactable {
 						break;
 				}
 			}
-			if (season == 2) {
+			if (season == Season.FALL) {
 				//Fall seeds
 				int rollVal = (int)(Math.random () * 2);
 				switch (rollVal) {

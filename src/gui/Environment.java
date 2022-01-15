@@ -27,6 +27,13 @@ public class Environment extends Saveable {
 	private boolean firstFrame = true;
 	private boolean isLoaded = false;
 	
+	public enum Season {
+		SPRING,
+		SUMMER,
+		FALL,
+		WINTER
+	}
+	
 	public Environment () {
 		
 		todColor = new ColorMap ();
@@ -64,6 +71,21 @@ public class Environment extends Saveable {
 	
 	public int getElapsedMonths () {
 		return monthCount;
+	}
+	
+	public Season getSeason () {
+		switch (monthCount % 4) {
+			case 0:
+				return Season.SPRING;
+			case 1:
+				return Season.SUMMER;
+			case 2:
+				return Season.FALL;
+			case 3:
+				return Season.WINTER;
+			default:
+				return null;
+		}
 	}
 	
 	public void setTimeDisplay (TimeOverlay display) {
