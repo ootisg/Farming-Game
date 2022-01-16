@@ -1,5 +1,9 @@
 package gui;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.util.ArrayList;
 
 import items.Avocado;
@@ -270,6 +274,21 @@ public class Inventory extends GuiComponent implements ItemContainer {
 				item.draw (cellX, cellY);
 			}
 		}
+		
+		//Draw the player's current earnings
+		int EARNINGS_AREA_WIDTH = 77;
+		int EARNINGS_AREA_LEFT = (int)getX () + 9;
+		int EARNINGS_AREA_CENTER = EARNINGS_AREA_LEFT + EARNINGS_AREA_WIDTH / 2;
+		int EARNINGS_AREA_TOP = (int)getY () + 96;
+		String toDraw = "$42069";
+		Graphics g = getWindow ().getBufferGraphics ();
+		g.setFont (new Font ("Courier", 20, 10));
+		FontMetrics fm = g.getFontMetrics ();
+		fm.stringWidth (toDraw);
+		int stringX = EARNINGS_AREA_CENTER - fm.stringWidth (toDraw) / 2; //Center the text
+		int stringY = EARNINGS_AREA_TOP + fm.getAscent ();
+		g.setColor (Color.BLACK);
+		g.drawString (toDraw, stringX, stringY);
 		
 		if (heldItem != null) {
 			heldItem.draw (getMouseX(), getMouseY());
