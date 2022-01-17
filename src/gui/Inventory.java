@@ -24,12 +24,19 @@ import json.JSONUtil;
 
 public class Inventory extends GuiComponent implements ItemContainer {
 
+	public static final int INV_MODE_DEFAULT = 1;
+	public static final int INV_MODE_SELL = 2;
+	
+	private int money;
 	private ArrayList<GameItem> items;
 	private Layout invLayout;
 	
 	private boolean clicked;
 	
 	private GameItem heldItem;
+	
+	private int hoveredCell;
+	private int invMode = 1;
 	
 	public Inventory () {
 		
@@ -70,6 +77,8 @@ public class Inventory extends GuiComponent implements ItemContainer {
 	@Override
 	public String toString () {
 		StringBuilder invBuilder = new StringBuilder ();
+		invBuilder.append (money);
+		invBuilder.append (",");
 		for (int i = 0; i < items.size (); i++) {
 			GameItem curr = items.get (i);
 			if (curr == null) {
@@ -89,17 +98,30 @@ public class Inventory extends GuiComponent implements ItemContainer {
 	public void loadFromString (String s) {
 		if (s != null && !s.isEmpty ()) {
 			String[] split = s.split (",");
+			money = Integer.parseInt (split[0]);
 			for (int i = 0; i < items.size (); i++) {
-				if (split [i].equals ("null")) {
+				if (split [i + 1].equals ("null")) {
 					items.set (i, null);
 				} else {
-					String[] params = split [i].split (" ");
+					String[] params = split [i + 1].split (" ");
 					GameItem it = GameItem.makeGameItem ("items." + params [0]);
 					it.setCount (Integer.parseInt (params [1]));
 					items.set (i, it);
 				}
 			}
 		}
+	}
+	
+	public int getMoney () {
+		return money;
+	}
+	
+	public void setMoney (int amt) {
+		money = amt;
+	}
+	
+	public void setMode (int mode) {
+		this.invMode = mode;
 	}
 	
 	@Override
@@ -110,30 +132,43 @@ public class Inventory extends GuiComponent implements ItemContainer {
 	@Override
 	public void frameEvent () {
 		clicked = false;
+		int cell = invLayout.getCellContainingPoint (getMouseX () - (int)getX (), getMouseY () - (int)getY ());
 		if (mouseClicked ()) {
 			if (getBounds ().contains (getMouseX (), getMouseY ())) {
 				clicked = true;
 			}
-			int cell = invLayout.getCellContainingPoint (getMouseX () - (int)getX (), getMouseY () - (int)getY ());
-			if (cell != -1) {
-				//TODO improve inventory UI functionality, it is very primitive
-				if (heldItem == null) {
-					if (getItem (cell) != null) {
-						heldItem = getItem (cell);
-						setItem (cell, null);
-					}
-				} else {
-					if (getItem (cell) == null) {
-						setItem (cell, heldItem);
-						heldItem = null;
+			if (invMode == INV_MODE_DEFAULT) {
+				if (cell != -1) {
+					//TODO improve inventory UI functionality, it is very primitive
+					if (heldItem == null) {
+						if (getItem (cell) != null) {
+							heldItem = getItem (cell);
+							setItem (cell, null);
+						}
 					} else {
-						GameItem temp = heldItem;
-						heldItem = getItem (cell);
-						setItem (cell, temp);
+						if (getItem (cell) == null) {
+							setItem (cell, heldItem);
+							heldItem = null;
+						} else {
+							GameItem temp = heldItem;
+							heldItem = getItem (cell);
+							setItem (cell, temp);
+						}
+					}
+				}
+			} else if (invMode == INV_MODE_SELL) {
+				if (cell != -1) {
+					//TODO allow items to specify sell value
+					money += 69;
+					if (getItem (cell).getCount () > 1) {
+						getItem (cell).removeOne ();
+					} else {
+						setItem (cell, null);
 					}
 				}
 			}
-			System.out.println (cell);
+		} else {
+			hoveredCell = cell;
 		}
 	}
 	
@@ -280,7 +315,7 @@ public class Inventory extends GuiComponent implements ItemContainer {
 		int EARNINGS_AREA_LEFT = (int)getX () + 9;
 		int EARNINGS_AREA_CENTER = EARNINGS_AREA_LEFT + EARNINGS_AREA_WIDTH / 2;
 		int EARNINGS_AREA_TOP = (int)getY () + 96;
-		String toDraw = "$42069";
+		String toDraw = "$" + money;
 		Graphics g = getWindow ().getBufferGraphics ();
 		g.setFont (new Font ("Courier", 20, 10));
 		FontMetrics fm = g.getFontMetrics ();
@@ -290,8 +325,17 @@ public class Inventory extends GuiComponent implements ItemContainer {
 		g.setColor (Color.BLACK);
 		g.drawString (toDraw, stringX, stringY);
 		
+		//Draw the held item
 		if (heldItem != null) {
 			heldItem.draw (getMouseX(), getMouseY());
+		}
+		
+		//Draw hovered-over item details (for sell mode)
+		if (invMode == INV_MODE_SELL && hoveredCell != -1) {
+			int DESC_OFFSET_Y = 12;
+			GameItem working = items.get (hoveredCell);
+			g.setColor (Color.WHITE);
+			g.drawString (working == null ? "" : "$69", getMouseX (), getMouseY () + DESC_OFFSET_Y);
 		}
 		
 	}

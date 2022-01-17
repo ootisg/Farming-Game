@@ -42,6 +42,12 @@ public class Gui extends GameObject {
 	public void frameEvent () {
 		if (keyPressed('E')) {
 			guiOpen = true;
+			inventory.setMode (Inventory.INV_MODE_DEFAULT);
+			MainLoop.pause ();
+		}
+		if (keyPressed ('O')) {
+			guiOpen = true;
+			inventory.setMode (Inventory.INV_MODE_SELL);
 			MainLoop.pause ();
 		}
 		if (keyPressed('P')) {

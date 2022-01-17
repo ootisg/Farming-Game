@@ -238,7 +238,7 @@ public abstract class GameItem implements Damageable {
 		getIcon ().draw (x, y);
 		if (getCount () > 1) {
 			Graphics g = MainLoop.getWindow ().getBufferGraphics ();
-			Font f = new Font ("Arial", 10, 8);
+			Font f = new Font ("Courier", 10, 8);
 			g.setFont (f);
 			g.setColor (Color.WHITE);
 			g.drawString (getProperty ("count"), x + 10, y + 15);
