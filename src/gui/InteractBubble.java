@@ -25,6 +25,7 @@ public class InteractBubble extends GameObject {
 		//Setup the hover outline
 		defaultHover = new Outline (this, defaultHoverColor);
 		defaultHover.declare (0, 0);
+		defaultHover.setPriority (-3);
 		defaultHover.setHidden (true);
 		defaultHover.setPersistent (true);
 	}

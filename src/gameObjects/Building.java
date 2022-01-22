@@ -15,17 +15,20 @@ public class Building extends GameObject {
 	private int doorXOffset;
 	private int doorYOffset;
 	
-	public Building (String type) {
-		
-		this.type = type;
-		Sprite buildingSpr = new Sprite ("resources/sprites/buildings/" + type + "/building.png");
-		setSprite (buildingSpr);
+	public Building () {
 		
 	}
 	
 	@Override
 	public void onDeclare () {
-		/*File doorOffset = new File ("resources/sprites/buildings/" + type + "/offset.txt");
+		
+		this.type = getVariantAttribute ("id");
+		Sprite buildingSpr = new Sprite ("resources/sprites/buildings/" + type + "/building.png");
+		setSprite (buildingSpr);
+		createHitbox (0, 48, 64, 32);
+		
+		setPriority (-2);
+		File doorOffset = new File ("resources/sprites/buildings/" + type + "/offset.txt");
 		Scanner s;
 		int doorXOffset = 0, doorYOffset = 0;
 		try {
@@ -35,10 +38,12 @@ public class Building extends GameObject {
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
+		System.out.println ("DECLARED");
 		door = new Door ();
+		door.setPriority (-2);
 		//door.setSprite (new Sprite ("resources/sprites/buildings/" + type + "/door.png"));
-		door.declare (getX () + 22, getY () + 64);
+		door.declare (getX () + doorXOffset, getY () + doorYOffset);
 	}
 
 }

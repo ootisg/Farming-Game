@@ -155,6 +155,7 @@ public class Player extends GameObject implements Damageable {
 			return true;
 		}
 		ArrayList<GameObject> solids = MainLoop.getObjectMatrix ().getAll (Debris.class);
+		solids.addAll (MainLoop.getObjectMatrix ().getAll (Building.class));
 		for (int i = 0; i < solids.size (); i++) {
 			if (obj.isColliding (solids.get (i))) {
 				return true;
